@@ -1,3 +1,4 @@
+local g = vim.g      -- a table to access global variables
 -------------------------------NVIM-Tree-Options---------------------------
 g.nvim_tree_width = 30
 g.nvim_tree_ignore = {'.git', 'node_modules', '.cache'}
