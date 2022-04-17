@@ -5,7 +5,7 @@ local g = vim.g      -- a table to access global variables
 local opt = vim.opt  -- to set options
 
 -------------------- OPTIONS -------------------------------
-cmd 'colorscheme onedark'            -- Put your favorite colorscheme here
+--cmd 'colorscheme onedark'            -- Put your favorite colorscheme here
 opt.completeopt = {'menuone', 'noinsert', 'noselect'}  -- Completion options (for deoplete)
 opt.expandtab = true                -- Use spaces instead of tabs
 opt.hidden = true                   -- Enable background buffers
