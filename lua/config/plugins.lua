@@ -4,7 +4,7 @@ local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
 cmd 'packadd paq-nvim'               -- load the package manager
 local paq = require('paq')  -- a convenient alias
 paq {
-	'savq/paq-nvim', opt = true;  -- paq-nvim manages itself
+	'isavq/paq-nvim';  -- paq-nvim manages itself
 	'nvim-treesitter/nvim-treesitter';
 	'nvim-telescope/telescope.nvim';
 	'nvim-lua/plenary.nvim';
