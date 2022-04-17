@@ -1,4 +1,4 @@
-local fmt = string.format:
+local fmt = string.format
 local paq_dir = fmt('%s/site/pack/paqs/start/paq-nvim', vim.fn.stdpath('data'))
 
 if vim.fn.empty(vim.fn.glob(paq_dir)) > 0 then
