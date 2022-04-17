@@ -14,6 +14,7 @@ end
 	 {'nvim-lua/popup.nvim'},
 	 {'kyazdani42/nvim-tree.lua'},
 	 {'kyazdani42/nvim-web-devicons'},
+	 {'akinsho/bufferline.nvim'},
 	 {'navarasu/onedark.nvim'},
 	 {'sakhnik/nvim-gdb'},
 	 {'nvim-lualine/lualine.nvim'},
