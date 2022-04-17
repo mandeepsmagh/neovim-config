@@ -48,4 +48,4 @@ map('n', '<leader>o', 'm`o<Esc>``')  -- Insert a newline in normal mode
 
 ---nvim-tree-mappings-------------------
 map('n', '<leader>n', ':NvimTreeToggle<CR>')    -- open/close
-map:('n', '<leader>r', ':NvimTreeRefresh<CR>')   -- refresh
+map('n', '<leader>r', ':NvimTreeRefresh<CR>')   -- refresh
