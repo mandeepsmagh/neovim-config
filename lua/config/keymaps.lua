@@ -50,6 +50,9 @@ map('n', '<leader>o', 'm`o<Esc>``')  -- Insert a newline in normal mode
 map('n', '<leader>n', ':NvimTreeToggle<CR>')    -- open/close
 map('n', '<leader>r', ':NvimTreeRefresh<CR>')   -- refresh
 
+--Telescope-----------------------------
+map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
+
 --debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
 map("n", "<F10>", ":lua require'dap'.step_over()<CR>")
