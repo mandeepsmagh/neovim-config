@@ -6,7 +6,7 @@ require'nvim-tree'.setup {actions = {
     }
 }
 -------------------------------NVIM-Tree-Options---------------------------
-g.nvim_tree_width = 40
+g.nvim_tree_width = 70
 g.nvim_tree_ignore = {'.git', 'node_modules', '.cache'}
 g.nvim_tree_gitignore = 1
 g.nvim_tree_auto_open = 1
