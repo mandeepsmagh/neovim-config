@@ -19,6 +19,6 @@ end
 	 {'sakhnik/nvim-gdb'},
 	 {'vim-airline/vim-airline'},
 	 {'numToStr/Comment.nvim'},
-	 {'neoclide/coc.nvim'}
+	 {'neoclide/coc.nvim', branch='release'}
 }
 
