@@ -1,6 +1,12 @@
 local g = vim.g      -- a table to access global variables
+require'nvim-tree'.setup {actions = {
+        open_file = {
+            resize_window = true
+        }
+    }
+}
 -------------------------------NVIM-Tree-Options---------------------------
-g.nvim_tree_width = 30
+g.nvim_tree_width = 40
 g.nvim_tree_ignore = {'.git', 'node_modules', '.cache'}
 g.nvim_tree_gitignore = 1
 g.nvim_tree_auto_open = 1
