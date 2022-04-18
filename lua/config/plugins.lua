@@ -17,19 +17,8 @@ end
 	 {'akinsho/bufferline.nvim'},
 	 {'navarasu/onedark.nvim'},
 	 {'sakhnik/nvim-gdb'},
-	 {'nvim-lualine/lualine.nvim'},
+	 {'vim-airline/vim-airline'},
 	 {'numToStr/Comment.nvim'},
-	 -- cmp plugins
-	 {'hrsh7th/nvim-cmp'}, -- The completion plugin
-	 {'hrsh7th/cmp-buffer'}, -- buffer completions
-	 {'hrsh7th/cmp-path'}, -- path completions
-	 {'hrsh7th/cmp-cmdline'}, -- cmdline completions
-	 {'saadparwaiz1/cmp_luasnip'}, -- snippet completions
-	 {'hrsh7th/cmp-nvim-lsp'},
-	-- LSP
-	{'neovim/nvim-lspconfig'},          -- enable LSP
-	{'williamboman/nvim-lsp-installer'}, -- simple to use language server installer
-	{'tamago324/nlsp-settings.nvim'},    -- language server settings defined in json for
-	{'jose-elias-alvarez/null-ls.nvim'} -- for formatters and linters
+	 {'neoclide/coc.nvim'}
 }
 
