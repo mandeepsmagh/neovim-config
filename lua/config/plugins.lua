@@ -7,19 +7,24 @@ end
 
 -------------------- PLUGINS -------------------------------
  require'paq'{
-	 {'isavq/paq-nvim'},  -- paq-nvim manages itself
-	 {'nvim-treesitter/nvim-treesitter'},
-	 {'nvim-telescope/telescope.nvim'},
-	 {'nvim-lua/plenary.nvim'},
-	 {'nvim-lua/popup.nvim'},
-	 {'kyazdani42/nvim-tree.lua'},
-	 {'kyazdani42/nvim-web-devicons'},
-	 {'akinsho/bufferline.nvim'},
-	 {'navarasu/onedark.nvim'},
-	 {'sakhnik/nvim-gdb'},
-	 {'vim-airline/vim-airline'},
-	 {'numToStr/Comment.nvim'},
-	 {'neoclide/coc.nvim', branch='release'},
-     {'akinsho/toggleterm.nvim'}
+    {'isavq/paq-nvim'},  -- paq-nvim manages itself
+    {'nvim-treesitter/nvim-treesitter'},
+    {'nvim-telescope/telescope.nvim'},
+    {'nvim-lua/plenary.nvim'},
+    {'nvim-lua/popup.nvim'},
+    {'kyazdani42/nvim-tree.lua'},
+    {'kyazdani42/nvim-web-deviconsd'},
+    {'akinsho/bufferline.nvim'},
+    {'navarasu/onedark.nvim'},
+    {'sakhnik/nvim-gdb'},
+    {'vim-airline/vim-airline'},
+    {'numToStr/Comment.nvim'},
+    {'neoclide/coc.nvim', branch='release'},
+    {'akinsho/toggleterm.nvim'},
+    -- debugging
+    {'mfussenegger/nvim-dap'},
+    {'rcarriga/nvim-dap-ui'},
+    {'theHamsta/nvim-dap-virtual-text'},
+    {'nvim-telescope/telescope-dap.nvim'}
 }
 
