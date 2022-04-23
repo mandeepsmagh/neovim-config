@@ -19,6 +19,9 @@ end
 	 {'sakhnik/nvim-gdb'},
 	 {'nvim-lualine/lualine.nvim'},
 	 {'numToStr/Comment.nvim'},
+     {'nvim-orgmode/orgmode'},
+     {'tpope/vim-fugitive'},
+     {'akinsho/toggleterm.nvim'},
 	 -- cmp plugins
 	 {'hrsh7th/nvim-cmp'}, -- The completion plugin
 	 {'hrsh7th/cmp-buffer'}, -- buffer completions

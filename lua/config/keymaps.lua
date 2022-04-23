@@ -49,3 +49,17 @@ map('n', '<leader>o', 'm`o<Esc>``')  -- Insert a newline in normal mode
 ---nvim-tree-mappings-------------------
 map('n', '<leader>n', ':NvimTreeToggle<CR>')    -- open/close
 map('n', '<leader>r', ':NvimTreeRefresh<CR>')   -- refresh
+
+--Telescope-----------------------------
+map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
+
+--debugging-------------------------------
+map("n", "<F5>", ":lua require'dap'.continue()<CR>")
+map("n", "<F10>", ":lua require'dap'.step_over()<CR>")
+map("n", "<F11>", ":lua require'dap'.step_into()<CR>")
+map("n", "<F9>", ":lua require'dap'.step_out()<CR>")
+map("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+map("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
+map("n", "<leader>lp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
+map("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>")
+map("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>")
