@@ -1,4 +1,8 @@
-local nvim_lsp = require'nvim_lsp'
+local status_ok, nvim_lsp = pcall(require, "lspconfig")
+
+if not status_ok then
+    return
+end
 
 return {
     cmd =  { "rust-analyzer" },
