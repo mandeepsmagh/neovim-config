@@ -1,43 +1,82 @@
-local fmt = string.format
-local paq_dir = fmt('%s/site/pack/paqs/start/paq-nvim', vim.fn.stdpath('data'))
+local fn = vim.fn
 
-if vim.fn.empty(vim.fn.glob(paq_dir)) > 0 then
-  vim.fn.system {'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', paq_dir}
+-- Place where packer is goint to be saved
+local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+
+-- Install packer from github if not currently installed
+if fn.empty(fn.glob(install_path)) > 0 then
+  PACKER_BOOTSTRAP = vim.fn.system({
+    "git",
+    "clone",
+    "--depth",
+    "1",
+    "https://github.com/wbthomason/packer.nvim",
+    install_path,
+  })
+  print("Installing packer close and reopen Neovim...")
+  vim.cmd([[packadd packer.nvim]])
 end
 
+-- Autocommand that reloads neovim whenever you save the plugins.lua file
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  augroup end
+]])
+
+-- Use a protected require call (pcall) so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+  return
+end
+
+-- Show packer messages in a popup. Looks cooler
+packer.init({
+  display = {
+    open_fn = function()
+      return require("packer.util").float({ border = "rounded" })
+    end,
+  },
+})
 -------------------- PLUGINS -------------------------------
- require'paq'{
-	 {'isavq/paq-nvim'},  -- paq-nvim manages itself
-	 {'nvim-treesitter/nvim-treesitter'},
-	 {'nvim-telescope/telescope.nvim'},
-	 {'nvim-lua/plenary.nvim'},
-	 {'nvim-lua/popup.nvim'},
-	 {'kyazdani42/nvim-tree.lua'},
-	 {'kyazdani42/nvim-web-devicons'},
-	 {'akinsho/bufferline.nvim'},
-	 {'navarasu/onedark.nvim'},
-	 {'sakhnik/nvim-gdb'},
-	 {'nvim-lualine/lualine.nvim'},
-	 {'numToStr/Comment.nvim'},
-     {'nvim-orgmode/orgmode'},
-     {'tpope/vim-fugitive'},
-     {'akinsho/toggleterm.nvim'},
+return packer.startup(function(use)
+    use 'wbthomason/packer.nvim'  -- packer itself
+	use 'nvim-treesitter/nvim-treesitter'
+	use 'nvim-telescope/telescope.nvim'
+	use 'nvim-lua/plenary.nvim'
+	use 'nvim-lua/popup.nvim'
+	use 'kyazdani42/nvim-tree.lua'
+	use 'kyazdani42/nvim-web-devicons'
+	use 'akinsho/bufferline.nvim'
+	use 'navarasu/onedark.nvim'
+	use 'sakhnik/nvim-gdb'
+	use 'nvim-lualine/lualine.nvim'
+	use 'numToStr/Comment.nvim'
+    use 'nvim-orgmode/orgmode'
+    use 'tpope/vim-fugitive'
+    use 'akinsho/toggleterm.nvim'
 	 -- cmp plugins
-	 {'hrsh7th/nvim-cmp'}, -- The completion plugin
-	 {'hrsh7th/cmp-buffer'}, -- buffer completions
-	 {'hrsh7th/cmp-path'}, -- path completions
-	 {'hrsh7th/cmp-cmdline'}, -- cmdline completions
-	 {'saadparwaiz1/cmp_luasnip'}, -- snippet completions
-	 {'hrsh7th/cmp-nvim-lsp'},
+	use 'hrsh7th/nvim-cmp' -- The completion plugin
+	use 'hrsh7th/cmp-buffer' -- buffer completions
+	use 'hrsh7th/cmp-path' -- path completions
+	use 'hrsh7th/cmp-cmdline' -- cmdline completions
+	use 'saadparwaiz1/cmp_luasnip' -- snippet completions
+	use 'hrsh7th/cmp-nvim-lsp'
 	-- LSP
-	{'neovim/nvim-lspconfig'},          -- enable LSP
-	{'williamboman/nvim-lsp-installer'}, -- simple to use language server installer
-	{'tamago324/nlsp-settings.nvim'},    -- language server settings defined in json for
-	{'jose-elias-alvarez/null-ls.nvim'}, -- for formatters and linters
+	use 'neovim/nvim-lspconfig'          -- enable LSP
+	use 'williamboman/nvim-lsp-installer' -- simple to use language server installer
+	use 'tamago324/nlsp-settings.nvim'    -- language server settings defined in json for
+	use 'jose-elias-alvarez/null-ls.nvim' -- for formatters and linters
     -- debugging
-    {'mfussenegger/nvim-dap'},
-    {'rcarriga/nvim-dap-ui'},
-    {'theHamsta/nvim-dap-virtual-text'},
-    {'nvim-telescope/telescope-dap.nvim'}
-}
+    use 'mfussenegger/nvim-dap'
+    use 'rcarriga/nvim-dap-ui'
+    use 'theHamsta/nvim-dap-virtual-text'
+    use 'nvim-telescope/telescope-dap.nvim'
+    -- Automatically set up your configuration after cloning packer.nvim
+    -- Put this at the end after all plugins
+    if PACKER_BOOTSTRAP then
+        require("packer").sync()
+    end
+end)
 
