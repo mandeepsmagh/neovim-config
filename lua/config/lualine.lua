@@ -7,12 +7,13 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'filename' },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
     -- lualine_c = { 'lsp_progress' },
-    lualine_c = {function()
-      return require'nvim-treesitter'.statusline(40) 
+    lualine_d = {function()
+      return require'nvim-treesitter'.statusline(40)
     end},
-    lualine_x = { 'filetype' },
+    lualine_x = { 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' },
 
