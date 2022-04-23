@@ -25,9 +25,10 @@ map('n', '<C-Left>', ':vertical resize +2<CR>')
 map('n', '<C-Right>', ':vertical resize -2<CR>')
 
 -- Move text up and down
-map("n", "<A-Down>", "<Esc>:m .+1<CR>==gi")
-map("n", "<A-Up>", "<Esc>:m .-2<CR>==gi")
-
+map("n", "<A-Down>", ":m .+1<CR>==gi")
+map("n", "<A-Up>", ":m .-2<CR>==gi")
+map("i", "<A-Down>", "<Esc>:m .+1<CR>==gi")
+map("i", "<A-Up>", "<Esc>:m .-2<CR>==gi")
 map("v", "<A-Down>", ":m .+1<CR>==")
 map("v", "<A-Up>", ":m .-2<CR>==")
 map("v", "p", '"_dP')
