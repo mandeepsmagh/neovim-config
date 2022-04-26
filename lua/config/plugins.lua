@@ -49,6 +49,7 @@ return packer.startup(function(use)
     use 'sakhnik/nvim-gdb'
     use 'nvim-lualine/lualine.nvim'
     use 'numToStr/Comment.nvim'
+    use 'JoosepAlviste/nvim-ts-context-commentstring'
     use 'nvim-orgmode/orgmode'
     use 'tpope/vim-fugitive'
     use 'akinsho/toggleterm.nvim'

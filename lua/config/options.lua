@@ -1,7 +1,5 @@
 ------------------- HELPERS -------------------------------
 local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
-local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
-local g = vim.g      -- a table to access global variables
 local opt = vim.opt  -- to set options
 
 -------------------- OPTIONS -------------------------------
@@ -26,4 +24,3 @@ opt.tabstop = 4                     -- Number of spaces tabs count for
 opt.termguicolors = true            -- True color support
 opt.wildmode = {'list', 'longest'}  -- Command-line completion mode
 opt.wrap = false                    -- Disable line wrap:wq
-
