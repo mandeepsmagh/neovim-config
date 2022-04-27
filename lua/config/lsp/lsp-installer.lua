@@ -10,20 +10,10 @@ lsp_installer.on_server_ready(function(server)
         on_attach = require("config.lsp.handlers").on_attach,
         capabilities = require("config.lsp.handlers").capabilities,
     }
-
-    if server.name == "jsonls" then
-        local jsonls_opts = require("config.lsp.settings.jsonls")
-        opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
-    end
-
-    if server.name == "sumneko_lua" then
-        local sumneko_opts = require("config.lsp.settings.sumneko_lua")
-        opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
-    end
-
-    if server.name == "rust_analyzer" then
-        local rust_opts = require("config.lsp.settings.rust_analyzer")
-        opts = vim.tbl_deep_extend("force", rust_opts, opts)
+    -- Override server settings if present
+    local present, server_settings = pcall(require, "config.lsp.settings." .. server.name)
+    if present then
+      opts = vim.tbl_deep_extend("force", server_settings, opts)
     end
 	-- This setup() function is exactly the same as lspconfig's setup function.
 	-- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
