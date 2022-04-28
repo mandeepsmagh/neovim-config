@@ -1,7 +1,6 @@
 local M = {}
 
 local status_ok, npairs = pcall(require, "nvim-autopairs")
-print("nvim-pairs", status_ok)
 if status_ok then
     npairs.setup({
       check_ts = true,

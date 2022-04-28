@@ -1,6 +1,6 @@
 local M = {}
 
-local colorscheme = 'onedark'
+local colorscheme = 'dawnfox' -- options are onedark, nightfox, dayfox, dawnfox, duskfox, nordfox, terafox
 
 local set = vim.opt
 local g = vim.g

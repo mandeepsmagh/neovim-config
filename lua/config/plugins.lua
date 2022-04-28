@@ -46,6 +46,7 @@ return packer.startup(function(use)
     use 'kyazdani42/nvim-web-devicons'
     use 'akinsho/bufferline.nvim'
     use 'navarasu/onedark.nvim'
+    use 'EdenEast/nightfox.nvim'
     use 'sakhnik/nvim-gdb'
     use 'nvim-lualine/lualine.nvim'
     use 'numToStr/Comment.nvim'
