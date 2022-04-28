@@ -61,7 +61,7 @@ map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
 
 -- Telescope-----------------------------
 map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
-
+map("n", "<leader>gr", "<cmd>Telescope live_grep<cr>")
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
 map("n", "<F10>", ":lua require'dap'.step_over()<CR>")
