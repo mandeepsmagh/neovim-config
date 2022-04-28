@@ -1,50 +1,52 @@
-local options = {
-  backup = false,                          -- creates a backup file
-  clipboard = "unnamedplus",               -- allows neovim to access the system clipboard
-  cmdheight = 2,                           -- more space in the neovim command line for displaying messages
-  completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-  conceallevel = 0,                        -- so that `` is visible in markdown files
-  -- colorcolumn = "80",
-  -- colorcolumn = "120",
-  fileencoding = "utf-8",                  -- the encoding written to a file
-  hlsearch = true,                         -- highlight all matches on previous search pattern
-  ignorecase = true,                       -- ignore case in search patterns
-  mouse = "a",                             -- allow the mouse to be used in neovim
-  pumheight = 10,                          -- pop up menu height
-  showmode = true,                        -- we don't need to see things like -- INSERT -- anymore
-  showtabline = 2,                         -- always show tabs
-  smartcase = true,                        -- smart case
-  smartindent = true,                      -- make indenting smarter again
-  splitbelow = true,                       -- force all horizontal splits to go below current window
-  splitright = true,                       -- force all vertical splits to go to the right of current window
-  swapfile = false,                        -- creates a swapfile
-  termguicolors = true,                    -- set term gui colors (most terminals support this)
-  timeoutlen = 100,                        -- time to wait for a mapped sequence to complete (in milliseconds)
-  undofile = true,                         -- enable persistent undo
-  updatetime = 200,                        -- faster completion (4000ms default)
-  writebackup = false,                     -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
-  expandtab = true,                        -- convert tabs to spaces
-  shiftwidth = 4,                          -- the number of spaces inserted for each indentation
-  tabstop = 4,                             -- insert 2 spaces for a tab
-  cursorline = true,                       -- highlight the current line
-  number = true,                           -- set numbered lines
-  laststatus = 3,
-  relativenumber = true,                  -- set relative numbered lines
-  numberwidth = 4,                         -- set number column width to 2 {default 4}
-  signcolumn = "yes",                      -- always show the sign column, otherwise it would shift the text each time
-  wrap = false,                            -- display lines as one long line
-  scrolloff = 8,                           -- is one of my fav
-  sidescrolloff = 8,
-  -- guifont = "monospace:h17",               -- the font used in graphical neovim applications
+local M = {}
 
-}
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+local colorscheme = 'onedark'
 
-vim.opt.shortmess:append "c"
+local set = vim.opt
+local g = vim.g
 
-for k, v in pairs(options) do
-  vim.opt[k] = v
-end
+vim.api.nvim_command(("colorscheme %s"):format(colorscheme))
 
-vim.cmd 'colorscheme onedark'            -- Put your favorite colorscheme here
+set.fileencoding = "utf-8" -- File content encoding for the buffer
+set.spelllang = "en" -- Support US english
+set.clipboard = "unnamedplus" -- Connection to the system clipboard
+set.mouse = "a" -- Enable mouse support
+set.signcolumn = "yes" -- Always show the sign column
+set.foldmethod = "manual" -- Create folds manually
+set.completeopt = { "menuone", "noselect" } -- Options for insert mode completion
+set.colorcolumn = "99999" -- Fix for the indentline problem
+set.backup = false -- Disable making a backup file
+set.expandtab = true -- Enable the use of space in tab
+set.hidden = true -- Ignore unsaved buffers
+set.hlsearch = true -- Highlight all the matches of search pattern
+set.ignorecase = true -- Case insensitive searching
+set.smartcase = true -- Case sensitivie searching
+set.spell = false -- Disable spelling checking and highlighting
+set.showmode = true -- Enable / Disable showing modes in command line
+set.smartindent = true -- Do auto indenting when starting a new line
+set.splitbelow = true -- Splitting a new window below the current one
+set.splitright = true -- Splitting a new window at the right of the current one
+set.swapfile = false -- Disable use of swapfile for the buffer
+set.termguicolors = true -- Enable 24-bit RGB color in the TUI
+set.undofile = true -- Enable persistent undo
+set.writebackup = false -- Disable making a backup before overwriting a file
+set.cursorline = true -- Highlight the text line of the cursor
+set.number = true -- Show numberline
+set.relativenumber = true -- Show relative numberline
+set.wrap = false -- Disable wrapping of lines longer than the width of window
+set.conceallevel = 0 -- Show text normally
+set.cmdheight = 2 -- Number of screen lines to use for the command line
+set.shiftwidth = 4 -- Number of space inserted for indentation
+set.tabstop = 4 -- Number of space in a tab
+set.scrolloff = 8 -- Number of lines to keep above and below the cursor
+set.sidescrolloff = 8 -- Number of columns to keep at the sides of the cursor
+set.pumheight = 10 -- Height of the pop up menu
+set.history = 100 -- Number of commands to remember in a history table
+set.timeoutlen = 300 -- Length of time to wait for a mapped sequence
+set.updatetime = 300 -- Length of time to wait before triggering the plugin
+set.fillchars = { eob = " " } -- Disable `~` on nonexistent lines
+
+g.do_filetype_lua = 1 -- use filetype.lua
+g.did_load_filetypes = 0 -- don't use filetype.vim
+
+return M
