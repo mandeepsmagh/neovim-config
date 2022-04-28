@@ -9,8 +9,6 @@ if not snip_status_ok then
   return
 end
 
-require("luasnip/loaders/from_vscode").lazy_load()
-
  local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -67,6 +65,7 @@ cmp.setup {
         ["<C-e>"] = cmp.mapping {
             i = cmp.mapping.abort(),
             c = cmp.mapping.close(),
+        },
     -- Accept currently selected item. If none selected, `select` first item.
     -- Set `select` to `false` to only confirm explicitly selected items.
         ["<CR>"] = cmp.mapping.confirm { select = true },
@@ -119,11 +118,13 @@ cmp.setup {
         behavior = cmp.ConfirmBehavior.Replace,
         select = false,
     },
-    documentation = {
-        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+    window = {
+        documentation = {
+            border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+        }
     },
     experimental = {
         ghost_text = false,
         native_menu = false,
     }
-}}
+}
