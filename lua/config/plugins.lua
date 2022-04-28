@@ -54,14 +54,18 @@ return packer.startup(function(use)
     use 'tpope/vim-fugitive'
     use 'akinsho/toggleterm.nvim'
     use 'b0o/SchemaStore.nvim'
+    use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
     -- cmp plugins
     use 'hrsh7th/nvim-cmp' -- The completion plugin
     use 'hrsh7th/cmp-buffer' -- buffer completions
     use 'hrsh7th/cmp-path' -- path completions
     use 'hrsh7th/cmp-cmdline' -- cmdline completions
-    use 'saadparwaiz1/cmp_luasnip' -- snippet completions
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-nvim-lua'
+    -- snippets
+    use 'L3MON4D3/LuaSnip' -- snippet completions
+    use 'saadparwaiz1/cmp_luasnip' -- used together with above plugin 
+    use 'rafamadriz/friendly-snippets' -- some extra snippets
     -- LSP
     use 'neovim/nvim-lspconfig' -- enable LSP
     use 'williamboman/nvim-lsp-installer' -- simple to use language server installer

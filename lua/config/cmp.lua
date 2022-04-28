@@ -5,6 +5,7 @@ end
 
 local snip_status_ok, luasnip = pcall(require, "luasnip")
 if not snip_status_ok then
+    print("snip_status", snip_status_ok)
   return
 end
 
