@@ -64,6 +64,10 @@ map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
 map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
 
+-- Split screen
+map('n', '<leader>s', '<cmd>split<CR>')  -- horizontal split
+map('n', '<leader>v', '<cmd>vsplit<CR>') -- vertical split
+
 -- Comment
 map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
 map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
