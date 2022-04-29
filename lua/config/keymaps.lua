@@ -61,7 +61,12 @@ map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
 
 -- Telescope-----------------------------
 map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
-map("n", "<leader>gr", "<cmd>Telescope live_grep<cr>")
+map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
+map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
+
+-- Comment
+map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
+map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
 map("n", "<F10>", ":lua require'dap'.step_over()<CR>")
