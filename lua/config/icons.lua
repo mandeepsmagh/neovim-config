@@ -17,5 +17,4 @@ local status_ok, icons = pcall(require, "nvim-web-devicons")
       zip = { icon = "", name = "Zip" },
     })
   end
-
 return M
