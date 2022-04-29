@@ -1,7 +1,6 @@
 local M = {}
 
-function M.config()
-  local status_ok, bufferline = pcall(require, "bufferline")
+local status_ok, bufferline = pcall(require, "bufferline")
   if status_ok then
     bufferline.setup({
       options = {
@@ -22,6 +21,5 @@ function M.config()
       },
     })
   end
-end
 
 return M
