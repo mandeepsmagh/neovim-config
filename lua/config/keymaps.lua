@@ -17,6 +17,8 @@ map('', '<leader>c', '"+y') -- Copy to clipboard in normal, visual, select and o
 map('n', '<leader>z', ':up<CR>') -- Save file
 map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
+map('n', 'qq', ':q!<CR>')        -- quit without saving
+map('n', 'QQ', ':qa!<CR>')       -- quit all without saving
 
 -- <Tab> to navigate the completion menu
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
@@ -86,6 +88,7 @@ map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 -- Comment
 map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
 map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
+
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
 map("n", "<F10>", ":lua require'dap'.step_over()<CR>")
