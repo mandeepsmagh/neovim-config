@@ -60,13 +60,28 @@ map('n', '<leader>n', ':NvimTreeToggle<CR>') -- open/close
 map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
 
 -- Telescope-----------------------------
-map("n", "<leader>f", "<cmd>Telescope find_files<CR>")
+map("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
 map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
 
 -- Split screen
 map('n', '<leader>s', '<cmd>split<CR>')  -- horizontal split
 map('n', '<leader>v', '<cmd>vsplit<CR>') -- vertical split
+
+-- LSP
+map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
+map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+map("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+map("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Rename current symbol" })
+map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+map("n", "<leader>f", "<cmd>lua vim.diagnostic.open_float()<CR>")
+map("n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>')
+map("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>')
+map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
+map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
 -- Comment
 map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
