@@ -33,7 +33,9 @@ packer.init({
                 border = "rounded"
             })
         end
-    }
+    },
+    auto_clean = true,
+    compile_on_sync = true
 })
 -------------------- PLUGINS -------------------------------
 return packer.startup(function(use)
@@ -72,6 +74,8 @@ return packer.startup(function(use)
     use 'williamboman/nvim-lsp-installer' -- simple to use language server installer
     use 'tamago324/nlsp-settings.nvim' -- language server settings defined in json for
     use 'jose-elias-alvarez/null-ls.nvim' -- for formatters and linters
+    --Java Debugging plugin--- 
+    use 'mfussenegger/nvim-jdtls'
     -- debugging
     use 'mfussenegger/nvim-dap'
     use 'rcarriga/nvim-dap-ui'

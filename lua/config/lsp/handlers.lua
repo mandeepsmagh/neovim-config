@@ -3,16 +3,17 @@ local M = {}
 M.setup = function()
     local signs = {{
         name = "DiagnosticSignError",
-        text = ""
+        text = "⚠"
     }, {
         name = "DiagnosticSignWarn",
-        text = ""
+        text = "⚠"
     }, {
         name = "DiagnosticSignHint",
-        text = ""
+        text = "!"
     }, {
         name = "DiagnosticSignInfo",
-        text = ""
+        text = "!"
+    }, {
     }}
 
     for _, sign in ipairs(signs) do
