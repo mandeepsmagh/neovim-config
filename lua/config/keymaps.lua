@@ -65,6 +65,8 @@ map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
 map("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
 map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
+map("n", "<leader>gs", "<cmd>Telescope git_status<CR>")
+map("n", "<leader>dg", "<cmd>Telescope diagnostics<CR>")
 
 -- Split screen
 map('n', '<leader>s', '<cmd>split<CR>')  -- horizontal split
@@ -87,6 +89,10 @@ map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 -- Comment
 map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
 map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
+
+-- Format
+map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document
+map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>") -- Format selection
 
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")

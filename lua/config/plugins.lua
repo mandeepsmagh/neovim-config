@@ -67,14 +67,14 @@ return packer.startup(function(use)
     use 'hrsh7th/cmp-nvim-lua'
     -- snippets
     use 'L3MON4D3/LuaSnip' -- snippet completions
-    use 'saadparwaiz1/cmp_luasnip' -- used together with above plugin 
+    use 'saadparwaiz1/cmp_luasnip' -- used together with above plugin
     use 'rafamadriz/friendly-snippets' -- some extra snippets
     -- LSP
     use 'neovim/nvim-lspconfig' -- enable LSP
     use 'williamboman/nvim-lsp-installer' -- simple to use language server installer
     use 'tamago324/nlsp-settings.nvim' -- language server settings defined in json for
     use 'jose-elias-alvarez/null-ls.nvim' -- for formatters and linters
-    --Java Debugging plugin--- 
+    --Java Debugging plugin---
     use 'mfussenegger/nvim-jdtls'
     -- debugging
     use 'mfussenegger/nvim-dap'
