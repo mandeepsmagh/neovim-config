@@ -58,6 +58,7 @@ return packer.startup(function(use)
     use 'akinsho/toggleterm.nvim'
     use 'b0o/SchemaStore.nvim'
     use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
+    use "goolord/alpha-nvim"
     -- cmp plugins
     use 'hrsh7th/nvim-cmp' -- The completion plugin
     use 'hrsh7th/cmp-buffer' -- buffer completions

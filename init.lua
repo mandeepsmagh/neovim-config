@@ -10,5 +10,6 @@ require 'config.comment'
 require 'config.nvim-tree'
 require 'config.lualine'
 require 'config.toggleterm'
+require 'config.alpha'
 require 'config.dap'
 
