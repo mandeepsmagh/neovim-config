@@ -1,6 +1,6 @@
 # neovim-config
 
-Neovim config with native LSP in main branch. Old `coc` related settings are available under `coc` branch. 
+Neovim config with native LSP in `main` branch. Old `coc` related settings are available under `coc` branch. 
 
 ## Pre-requisites
 
@@ -60,6 +60,7 @@ mv nvim NVIM_BAK
 2. Follow above installation steps.
 
 3. Want to revert back to your config ?
+
 - Follow uninstall steps
 - restore your config by renaming it back to original
 
