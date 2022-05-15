@@ -3,7 +3,7 @@
 ## Pre-requisites
 
 - [Neovim 0.7.0 install page](https://github.com/neovim/neovim/releases/tag/v0.7.0)
-- I recommend using [Nix Package Manager](https://nixos.org/download.html)
+- I recommend using [Nix Package Manager](https://nixos.org/download.html) to install / manage neovim for Linux / MacOS
 - [Use a Nerd Font](https://www.nerdfonts.com/) in your terminal emulator.
 
 ### Semi-optional 
