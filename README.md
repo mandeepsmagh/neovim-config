@@ -22,7 +22,7 @@ git clone git@github.com:mandeepsmagh/neovim-config.git ~/.config/nvim --depth 1
 
 ### Windows
 
-1. Install [`mingw`](http://mingw-w64.org/doku.php) if you don't already have it.
+1. Install [`mingw`](http://mingw-w64.org) if you don't already have it.
 
 ```shell
 choco install mingw
