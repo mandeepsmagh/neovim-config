@@ -6,7 +6,7 @@
 - I recommend using [Nix Package Manager](https://nixos.org/download.html) to install / manage neovim for Linux / MacOS
 - [Use a Nerd Font](https://www.nerdfonts.com/) in your terminal emulator.
 
-### Semi-optional 
+### Must-have for fully functional nvim config  
 
 - [`rust`](https://www.rust-lang.org/tools/install) is required for ripgrep.
 - [`ripgrep`](https://github.com/BurntSushi/ripgrep) is required for grep searching with _Telescope_
@@ -14,7 +14,7 @@
 ## Install
 
 ### Linux and MacOS
-Clone repo (Example uses ssh to clone repo) and install required plugins:
+Clone repo (Example uses ssh url to clone repo) and install required plugins:
 
 ```shell
 git clone git@github.com:mandeepsmagh/neovim-config.git ~/.config/nvim --depth 1
