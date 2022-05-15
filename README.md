@@ -52,7 +52,7 @@ rm -rf ~/.cache/nvim
 1. Backup your current config under different name
 
 ```shell
-mv nvim NVMI_BAK
+mv nvim NVIM_BAK
 ```
 
 2. Follow above installation steps.
