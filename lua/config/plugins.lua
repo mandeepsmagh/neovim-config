@@ -59,6 +59,7 @@ return packer.startup(function(use)
     use 'b0o/SchemaStore.nvim'
     use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
     use "goolord/alpha-nvim"
+    use "RRethy/vim-illuminate" -- highlight selected
     -- cmp plugins
     use 'hrsh7th/nvim-cmp' -- The completion plugin
     use 'hrsh7th/cmp-buffer' -- buffer completions

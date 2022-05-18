@@ -57,15 +57,13 @@ end
 
 local function lsp_highlight_document(client)
     -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
-        vim.api.nvim_exec([[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]], false)
+    -- if client.server_capabilities.document_highlight then
+    -- end
+    local status_ok, illuminate = pcall(require, "illuminate")
+    if not status_ok then
+        return
     end
+    illuminate.on_attach(client)
 end
 
 local function lsp_keymaps(bufnr)
@@ -74,7 +72,7 @@ local function lsp_keymaps(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
-    if client.name == "tsserver" then
+    if client.name == "tsserver" or "sumneko_lua" then
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
     end
