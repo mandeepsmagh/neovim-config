@@ -19,6 +19,8 @@ map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
 map('n', 'qq', ':q!<CR>')        -- quit without saving
 map('n', 'QQ', ':qa!<CR>')       -- quit all without saving
+-- map('i', 'jj', '<Esc>')          -- Escape key mapped to jj
+map('n', ';', ':')               -- Command mode
 
 -- <Tab> to navigate the completion menu
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {

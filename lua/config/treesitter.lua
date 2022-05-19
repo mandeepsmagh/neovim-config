@@ -3,6 +3,8 @@ if not status_ok then
     return
 end
 
+-- require 'nvim-treesitter.install'.compilers = {'clang'}
+
 configs.setup {
     ensure_installed = { "lua", "rust", "javascript", "c_sharp", "pug", "java"  },
     sync_install = false,
