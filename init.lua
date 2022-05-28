@@ -13,4 +13,3 @@ require 'config.toggleterm'
 require 'config.alpha'
 require 'config.dap'
 require 'config.indent-line'
-

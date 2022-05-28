@@ -68,7 +68,7 @@ end
 
 local function lsp_keymaps(bufnr)
     vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-    -- vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+    -- vim.cmd [[ command! Format execute 'lua vim.lsp.buf.format({ async = true })' ]]
 end
 
 M.on_attach = function(client, bufnr)
