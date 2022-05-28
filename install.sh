@@ -14,11 +14,11 @@ sudo nix-channel --update
 # nix-env -u '*'
 # Install packages
 nix-env -iA \
-	nixpkgs.git \
-	nixpkgs.neovim \
-	nixpkgs.tmux \
-	nixpkgs.yarn \
-	nixpkgs.ripgrep \
-	nixpkgs.gcc \
+    nixpkgs.git \
+    nixpkgs.neovim \
+    nixpkgs.tmux \
+    nixpkgs.yarn \
+    nixpkgs.ripgrep \
+    nixpkgs.gcc \
     nixpkgs.zig \
     nixpkgs.fish \
