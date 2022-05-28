@@ -8,7 +8,7 @@ Neovim config with native LSP in `main` branch. Old `coc` related settings are a
 - I recommend using [Nix Package Manager](https://nixos.org/download.html) to install / manage neovim for Linux / MacOS
 - [Use a Nerd Font](https://www.nerdfonts.com/) in your terminal emulator.
 
-'install.sh' script is also available in the directory to automatically install everything. 
+`install.sh` script is also available in the directory to automatically install everything. 
 
 ### Must-have for fully functional nvim config  
 
