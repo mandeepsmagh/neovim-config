@@ -1,7 +1,7 @@
 local M = {}
 
 M.setup = function()
-    local signs = {{
+    local signs = { {
         name = "DiagnosticSignError",
         text = "⚠"
     }, {
@@ -14,7 +14,7 @@ M.setup = function()
         name = "DiagnosticSignInfo",
         text = "!"
     }, {
-    }}
+    } }
 
     for _, sign in ipairs(signs) do
         vim.fn.sign_define(sign.name, {
@@ -77,6 +77,8 @@ M.on_attach = function(client, bufnr)
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
     end
+    -- client.server_capabilities.documentFormattingProvider = true
+    -- client.server_capabilities.documentRangeFormattingProvider = true
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
 end
@@ -91,11 +93,11 @@ capabilities.textDocument.completion.completionItem.deprecatedSupport = true
 capabilities.textDocument.completion.completionItem.commitCharactersSupport = true
 capabilities.textDocument.completion.completionItem.tagSupport = { valueSet = { 1 } }
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    "documentation",
-    "detail",
-    "additionalTextEdits",
-  },
+    properties = {
+        "documentation",
+        "detail",
+        "additionalTextEdits",
+    },
 }
 
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
