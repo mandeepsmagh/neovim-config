@@ -14,7 +14,6 @@ sudo nix-channel --update
 # nix-env -u '*'
 # Install packages
 nix-env -iA \
-    nixpkgs.git \
     nixpkgs.neovim \
     nixpkgs.tmux \
     nixpkgs.yarn \
