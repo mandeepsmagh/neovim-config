@@ -1,11 +1,11 @@
 local servers = {
 	"sumneko_lua",
-	-- "cssls",
+	"cssls",
 	-- "html",
-	-- "tsserver",
+	"tsserver",
 	-- "pyright",
 	-- "bashls",
-	"jsonls",
+	-- "jsonls",
 	-- "yamlls",
     "rust_analyzer"
 }
