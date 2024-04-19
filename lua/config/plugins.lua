@@ -18,13 +18,15 @@ local lazy = require('lazy')
 
 -- Define your plugins
 local plugins = {
-    'wbthomason/packer.nvim', -- packer itself
     'nvim-treesitter/nvim-treesitter',
     'nvim-telescope/telescope.nvim',
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
-    'kyazdani42/nvim-tree.lua',
-    'kyazdani42/nvim-web-devicons',
+    {
+        "nvim-tree/nvim-tree.lua",
+        opts = { on_attach = on_attach_change }
+    },
+    'nvim-tree/nvim-web-devicons',
     'akinsho/bufferline.nvim',
     'navarasu/onedark.nvim',
     'EdenEast/nightfox.nvim',
