@@ -73,6 +73,10 @@ map("n", "<leader>dg", "<cmd>Telescope diagnostics<CR>")
 -- Split screen
 map('n', '<leader>s', '<cmd>split<CR>')  -- horizontal split
 map('n', '<leader>v', '<cmd>vsplit<CR>') -- vertical split
+map('n', '<C-h>', '<C-w>h') -- move to left
+map('n', '<C-j>', '<C-w>j') -- move to below
+map('n', '<C-k>', '<C-w>k') -- move to above
+map('n', '<C-l>', '<C-w>l') -- move to right
 
 -- LSP
 map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
