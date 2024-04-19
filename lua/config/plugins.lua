@@ -23,7 +23,8 @@ local plugins = {
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
     {
-        "nvim-tree/nvim-tree.lua",
+        'nvim-tree/nvim-tree.lua',
+        lazy = true,
         opts = { on_attach = on_attach_change }
     },
     'nvim-tree/nvim-web-devicons',
@@ -69,4 +70,4 @@ local plugins = {
 }
 
 -- Initialize lazy.nvim with your plugins
-return lazy.setup(plugins)
+return lazy.setup(plugins, op)
