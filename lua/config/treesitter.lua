@@ -6,16 +6,12 @@ end
 -- require 'nvim-treesitter.install'.compilers = {'clang'}
 
 configs.setup {
-    ensure_installed = { "lua", "rust", "javascript", "c_sharp", "pug", "java"  },
+    ensure_installed = { "lua", "rust", "javascript", "c_sharp" },
     sync_install = false,
     ignore_install = {},
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false
-    },
-    context_commentstring = {
-        enable = true,
-        enable_autocmd = false
     },
     autopairs = {
         enable = true
