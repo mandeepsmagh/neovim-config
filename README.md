@@ -4,7 +4,7 @@ Neovim config with native LSP in `main` branch. Old `coc` related settings are a
 
 ## Pre-requisites
 
-- [Neovim 0.7.0 install page](https://github.com/neovim/neovim/releases/tag/v0.7.0)
+- [Neovim 0.9.5 install page](https://github.com/neovim/neovim/releases/tag/v0.9.5)
 - I recommend using [Nix Package Manager](https://nixos.org/download.html) to install / manage neovim for Linux / MacOS
 - [Use a Nerd Font](https://www.nerdfonts.com/) in your terminal emulator.
 
@@ -26,21 +26,23 @@ git clone git@github.com:mandeepsmagh/neovim-config.git ~/.config/nvim --depth 1
 
 ### Windows
 
-1. Install [`mingw`](http://mingw-w64.org) if you don't already have it.
+1. Install Neovim using `winget`
 
-```shell
-choco install mingw
+```powershell
+winget install Neovim.Neovim
 ```
 
-2. Install `packer`
+2.(Optional) Install zig to resolve this error - No C compiler found! "cc", "gcc", "clang", "cl", "zig" are not executable.
 
-```shell
-git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
-git clone git@github.com:mandeepsmagh/neovim-config.git --depth 1
+```powershell
+winget install -e --id zig.zig
+
 ```
+3. Clone repo 
 
-3. Copy the nvim dir to `~/AppData/Local/`
-
+```powershell
+git clone git@github.com:mandeepsmagh/neovim-config.git --depth 1 $env:USERPROFILE\AppData\Local\nvim\
+```
 ## Uninstall
 
 Uninstalling is as simple as removing the `nvim` configuration directories.
