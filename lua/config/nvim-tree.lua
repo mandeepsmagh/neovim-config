@@ -11,6 +11,7 @@ end
 local tree_cb = nvim_tree_config.nvim_tree_callback
 
 return nvim_tree.setup {
+    event = "VeryLazy",
     disable_netrw = true,
     hijack_netrw = true,
     open_on_setup = false,
