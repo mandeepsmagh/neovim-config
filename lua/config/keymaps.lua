@@ -56,7 +56,7 @@ map("x", "<A-Up>", ":move '<-2<CR>gv-gv")
 map('v', '<', '<gv')
 map('v', '>', '>gv')
 
-map('n', '<C-l>', '<cmd>noh<CR>') -- Clear highlights
+map('n', '<ESC><ESC>', '<cmd>noh<CR>') -- Clear highlights
 map('n', '<leader>o', 'm`o<Esc>``') -- Insert a newline in normal mode
 
 ---nvim-tree-mappings-------------------
