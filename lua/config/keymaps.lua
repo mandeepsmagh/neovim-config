@@ -64,7 +64,7 @@ map('n', '<leader>n', ':NvimTreeToggle<CR>') -- open/close
 map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
 
 -- Telescope-----------------------------
-map("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
+map("n", '<C-p>', "<cmd>Telescope find_files<CR>")
 map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>")
