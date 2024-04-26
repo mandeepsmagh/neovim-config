@@ -43,7 +43,14 @@ M.setup = function()
             prefix = ""
         }
     }
+    -- Toggle function
+    function _G.toggle_virtual_text()
+      config.virtual_text = not config.virtual_text
+      vim.diagnostic.config(config)
+    end
 
+    -- Key mapping
+    vim.api.nvim_set_keymap('n', '<leader>t', '<cmd>lua toggle_virtual_text()<CR>', {noremap = true, silent = true})
     vim.diagnostic.config(config)
 
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
