@@ -119,8 +119,12 @@ cmp.setup {
         select = false,
     },
     window = {
+        completion = {
+            border = "rounded",
+            scrollbard = false,
+        },
         documentation = {
-            border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+            border = "rounded",
         }
     },
     experimental = {

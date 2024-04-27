@@ -1,15 +1,21 @@
-local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
+local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd'
 
 local function map(mode, lhs, rhs, opts)
-    local options = {
+   local options = {
         noremap = true
     }
-    if opts then
-        options = vim.tbl_extend('force', options, opts)
+   if opts then
+       options = vim.tbl_extend('force', options, opts)
     end
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
-
+--local keymap = vim.keymap.set
+--local opts = { noremap = true, silent = true }
+--
+--local function map(mode, lhs, rhs, extra_opts)
+--    local options = vim.tbl_extend('force', opts, extra_opts or {})
+--    keymap({mode=mode, lhs=lhs, rhs=rhs, options=options})
+--end
 -------------------- MAPPINGS ------------------------------
 cmd 'let mapleader = "\\<space>"' -- space as leader key
 map('n', 'zz', ':up<CR>') -- save file
@@ -43,7 +49,6 @@ map("i", "<A-Down>", "<Esc>:m .+1<CR>==gi")
 map("i", "<A-Up>", "<Esc>:m .-2<CR>==gi")
 map("v", "<A-Down>", ":m .+1<CR>==")
 map("v", "<A-Up>", ":m .-2<CR>==")
-map("v", "p", '"_dP')
 
 -- Visual Block --
 -- Move text up and down
@@ -93,8 +98,8 @@ map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
 -- Comment
-map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
-map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
+--map("n", "<leader>/", '<cmd> lua require("Comment.api").toggle_current_linewise()<CR>', { desc = "Toggle comment line" })
+--map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
 
 -- Format
 map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document

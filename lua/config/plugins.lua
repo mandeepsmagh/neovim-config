@@ -65,11 +65,11 @@ local plugins = {
         lazy = true
     },
     {
-        'numToStr/Comment.nvim',
-        lazy = true
+        'numToStr/Comment.nvim'
     },
     {
         'JoosepAlviste/nvim-ts-context-commentstring',
+        event = 'VeryLazy',
     },
     {
         'nvim-orgmode/orgmode',
