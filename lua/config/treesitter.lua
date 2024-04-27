@@ -6,7 +6,8 @@ end
 -- require 'nvim-treesitter.install'.compilers = {'clang'}
 
 configs.setup {
-    ensure_installed = { "lua", "c_sharp", "html", "typescript", "bash", "json", "svelte", "rust", "javascript", "c_sharp" },
+    ensure_installed = { 
+        "lua", "c_sharp", "html", "typescript", "bash", "json", "svelte", "rust", "javascript", "c_sharp", "gitignore", "sql", "markdown", "markdown_inline"},
     sync_install = false,
     ignore_install = {},
     highlight = {
