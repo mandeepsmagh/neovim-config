@@ -1,6 +1,6 @@
 # neovim-config
 
-Neovim config with native LSP in `main` branch. Old `coc` related settings are available under `coc` branch. 
+Neovim config with native LSP.
 
 ## Pre-requisites
 
