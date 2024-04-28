@@ -1,3 +1,4 @@
+local utils = require('config.utils')
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -18,6 +19,7 @@ map('n', 'qq', ':q!<CR>')        -- quit without saving
 map('n', 'QQ', ':qa!<CR>')       -- quit all without saving
 -- map('i', 'jj', '<Esc>')          -- Escape key mapped to jj
 map('n', ';', ':')               -- Command mode
+map('n', '<leader>a', 'ggVG') -- select All
 
 -- <Tab> to navigate the completion menu
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
@@ -26,6 +28,9 @@ map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
 map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {
     expr = true
 })
+
+-- Markdown notes
+map('n', '<leader>nm', utils.CreateNote)
 
 -- Resize with arrows
 map('n', '<C-Up>', ':resize +2<CR>')
