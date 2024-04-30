@@ -93,11 +93,6 @@ map("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>')
 map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
--- Comment
--- map("n", "<leader>/", function() require('Comment.api').toggle.linewise.current() end, { desc = "Toggle comment line" })
- map("n", "<leader>/", :lua MiniComment.toggle_lines(), { desc = "Toggle comment line" })
---map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
-
 -- Format
 map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document
 map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>") -- Format selection
