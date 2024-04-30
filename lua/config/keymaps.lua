@@ -94,7 +94,8 @@ map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
 -- Comment
-map("n", "<leader>/", function() require('Comment.api').toggle.linewise.current() end, { desc = "Toggle comment line" })
+-- map("n", "<leader>/", function() require('Comment.api').toggle.linewise.current() end, { desc = "Toggle comment line" })
+ map("n", "<leader>/", :lua MiniComment.toggle_lines(), { desc = "Toggle comment line" })
 --map("v", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", { desc = "Toggle comment line" })
 
 -- Format

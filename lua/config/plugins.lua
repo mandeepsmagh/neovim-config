@@ -34,7 +34,6 @@ local plugins = {
         'nvim-lua/popup.nvim',
         lazy = true
     },
-    
     {
         'nvim-tree/nvim-tree.lua',
         lazy = true,
@@ -43,6 +42,12 @@ local plugins = {
     {
         'nvim-tree/nvim-web-devicons',
         lazy = true
+    },
+    { 
+        'echasnovski/mini.nvim',
+        config = function()
+            require('mini.comment').setup()
+        end
     },
     {
         'akinsho/bufferline.nvim',
@@ -69,9 +74,6 @@ local plugins = {
     {
         'nvim-lualine/lualine.nvim',
         lazy = true
-    },
-    {
-        'numToStr/Comment.nvim'
     },
     {
         'JoosepAlviste/nvim-ts-context-commentstring',
