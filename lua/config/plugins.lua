@@ -46,7 +46,13 @@ local plugins = {
     { 
         'echasnovski/mini.nvim',
         config = function()
-            require('mini.comment').setup()
+            require('mini.comment').setup({
+                mappings = {
+                    comment = '<Leader>/',
+                    comment_visual = '<Leader>/',
+                    comment_line = '<Leader>/'
+                }
+            })
         end
     },
     {
