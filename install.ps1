@@ -1,4 +1,3 @@
-# Not tested!, initial concept to automate neovim setup in Windows
 # Step 1: Check if winget is installed
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     Write-Error "winget is not installed. Please install it manually from the Microsoft Store."
