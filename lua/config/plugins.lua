@@ -20,7 +20,10 @@ local lazy = require('lazy')
 local plugins = {
     {
         'nvim-treesitter/nvim-treesitter',
-        lazy = true
+        lazy = true,
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        }
     },
     {
         'nvim-telescope/telescope.nvim',
