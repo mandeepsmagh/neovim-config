@@ -94,8 +94,8 @@ map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
 -- Format
-map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document
-map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>") -- Format selection
+-- map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document
+-- map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>") -- Format selection
 
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
