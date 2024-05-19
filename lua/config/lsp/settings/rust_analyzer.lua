@@ -9,7 +9,13 @@ local opts = {
             },
             experimental = {
                 procAttrMacros = true
-            }
+            },
+            inlayHints = {
+                enable = true,
+                showParameterNames = true,
+                parameterHintsPrefix = "<- ",
+                otherHintsPrefix = "=> ",
+            },
         }
     }
 }
