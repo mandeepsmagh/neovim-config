@@ -16,8 +16,8 @@ sudo nix-channel --update
 nix-env -iA \
     nixpkgs.neovim \
     nixpkgs.tmux \
-    nixpkgs.yarn \
     nixpkgs.ripgrep \
     nixpkgs.gcc \
     nixpkgs.zig \
     nixpkgs.fish \
+    nixpkgs.stylua
