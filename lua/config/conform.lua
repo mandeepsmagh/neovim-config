@@ -1,5 +1,5 @@
 return {
-  -- event = { "BufReadPre", "BufNewFile" },
+  event = { "BufReadPre", "BufNewFile" },
   config = function()
     local conform = require("conform")
 
