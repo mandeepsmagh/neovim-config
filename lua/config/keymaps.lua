@@ -1,42 +1,42 @@
-local utils = require('config.utils')
+local utils = require("config.utils")
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 local function map(mode, lhs, rhs, extra_opts)
-    local options = vim.tbl_extend('force', opts, extra_opts or {})
+    local options = vim.tbl_extend("force", opts, extra_opts or {})
     keymap(mode, lhs, rhs, options)
 end
 -------------------- MAPPINGS ------------------------------
-map('n', '<Space>', '') -- space as leader
-vim.g.mapleader = ' ' -- space as leader
-vim.g.maplocalleader = ' ' -- space as local leader
-map('n', 'zz', ':up<CR>') -- save file
-map('', '<leader>c', '"+y') -- Copy to clipboard in normal, visual, select and operator modes
-map('n', '<leader>z', ':up<CR>') -- Save file
-map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
-map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
-map('n', 'qq', ':q!<CR>')        -- quit without saving
-map('n', 'QQ', ':qa!<CR>')       -- quit all without saving
-map('i', 'jj', '<Esc>')          -- Escape key mapped to jj
-map('n', ';', ':')               -- Command mode
-map('n', '<leader>a', 'ggVG') -- select All
+map("n", "<Space>", "") -- space as leader
+vim.g.mapleader = " " -- space as leader
+vim.g.maplocalleader = " " -- space as local leader
+map("n", "zz", ":up<CR>") -- save file
+map("", "<leader>c", '"+y') -- Copy to clipboard in normal, visual, select and operator modes
+map("n", "<leader>z", ":up<CR>") -- Save file
+map("i", "<C-u>", "<C-g>u<C-u>") -- Make <C-u> undo-friendly
+map("i", "<C-w>", "<C-g>u<C-w>") -- Make <C-w> undo-friendly
+map("n", "qq", ":q!<CR>") -- quit without saving
+map("n", "QQ", ":qa!<CR>") -- quit all without saving
+map("i", "jj", "<Esc>") -- Escape key mapped to jj
+map("n", ";", ":") -- Command mode
+map("n", "<leader>a", "ggVG") -- select All
 
 -- <Tab> to navigate the completion menu
-map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
-    expr = true
+map("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
+    expr = true,
 })
-map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {
-    expr = true
+map("i", "<Tab>", 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {
+    expr = true,
 })
 
 -- Markdown notes
-map('n', '<leader>nm', utils.CreateNote)
+map("n", "<leader>nm", utils.CreateNote)
 
 -- Resize with arrows
-map('n', '<C-Up>', ':resize +2<CR>')
-map('n', '<C-Down>', ':resize -2<CR>')
-map('n', '<C-Left>', ':vertical resize +2<CR>')
-map('n', '<C-Right>', ':vertical resize -2<CR>')
+map("n", "<C-Up>", ":resize +2<CR>")
+map("n", "<C-Down>", ":resize -2<CR>")
+map("n", "<C-Left>", ":vertical resize +2<CR>")
+map("n", "<C-Right>", ":vertical resize -2<CR>")
 
 -- Move text up and down
 map("n", "<A-Down>", ":m .+1<CR>==gi")
@@ -54,30 +54,30 @@ map("x", "<A-Down>", ":move '>+1<CR>gv-gv")
 map("x", "<A-Up>", ":move '<-2<CR>gv-gv")
 
 -- Indent
-map('v', '<', '<gv')
-map('v', '>', '>gv')
+map("v", "<", "<gv")
+map("v", ">", ">gv")
 
-map('n', '<ESC><ESC>', '<cmd>noh<CR>') -- Clear highlights
-map('n', '<leader>o', 'm`o<Esc>``') -- Insert a newline in normal mode
+map("n", "<ESC><ESC>", "<cmd>noh<CR>") -- Clear highlights
+map("n", "<leader>o", "m`o<Esc>``") -- Insert a newline in normal mode
 
 ---nvim-tree-mappings-------------------
-map('n', '<leader>n', ':NvimTreeToggle<CR>') -- open/close
-map('n', '<leader>r', ':NvimTreeRefresh<CR>') -- refresh
+map("n", "<leader>n", ":NvimTreeToggle<CR>") -- open/close
+map("n", "<leader>r", ":NvimTreeRefresh<CR>") -- refresh
 
 -- Telescope-----------------------------
-map("n", '<C-p>', "<cmd>Telescope find_files<CR>")
+map("n", "<C-p>", "<cmd>Telescope find_files<CR>")
 map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>")
 map("n", "<leader>dg", "<cmd>Telescope diagnostics<CR>")
 
 -- Split screen
-map('n', '<leader>s', '<cmd>split<CR>')  -- horizontal split
-map('n', '<leader>v', '<cmd>vsplit<CR>') -- vertical split
-map('n', '<C-h>', '<C-w>h') -- move to left
-map('n', '<C-j>', '<C-w>j') -- move to below
-map('n', '<C-k>', '<C-w>k') -- move to above
-map('n', '<C-l>', '<C-w>l') -- move to right
+map("n", "<leader>s", "<cmd>split<CR>") -- horizontal split
+map("n", "<leader>v", "<cmd>vsplit<CR>") -- vertical split
+map("n", "<C-h>", "<C-w>h") -- move to left
+map("n", "<C-j>", "<C-w>j") -- move to below
+map("n", "<C-k>", "<C-w>k") -- move to above
+map("n", "<C-l>", "<C-w>l") -- move to right
 
 -- LSP
 map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
@@ -94,8 +94,8 @@ map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
 
 -- Format
--- map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.formatting()<CR>") -- Format document
--- map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>") -- Format selection
+-- map("n", "<leader>fd", "<cmd>lua vim.lsp.buf.format()<CR>") -- Format document
+-- map("v", "<leader>fs", "<ESC><cmd>lua vim.lsp.buf.format({ range = true })<CR>") -- Format selection
 
 -- debugging-------------------------------
 map("n", "<F5>", ":lua require'dap'.continue()<CR>")
