@@ -56,7 +56,7 @@ local plugins = {
                     comment_line = "<Leader>/",
                 },
             })
-            require("mini.sessions").setup({})
+            require("mini.sessions").setup()
         end,
     },
     {
