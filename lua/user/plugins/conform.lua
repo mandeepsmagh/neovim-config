@@ -1,5 +1,6 @@
+
 return {
-  event = { "BufReadPre", "BufNewFile" },
+  'stevearc/conform.nvim',
   config = function()
     local conform = require("conform")
 
@@ -33,5 +34,6 @@ return {
         timeout_ms = 500,
       })
     end, { desc = "Format file or range (in visual mode)" })
+
   end,
 }
