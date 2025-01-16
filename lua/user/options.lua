@@ -1,11 +1,11 @@
 local M = {}
 
-local colorscheme = 'tokyonight-night' -- options are onedark, nightfox, dayfox, dawnfox, duskfox, nordfox, terafoxA
+--local colorscheme = "tokyonight-night" -- options are onedark, nightfox, dayfox, dawnfox, duskfox, nordfox, terafoxA
 
 local set = vim.opt
 local g = vim.g
 
-vim.api.nvim_command(("colorscheme %s"):format(colorscheme))
+--vim.api.nvim_command(("colorscheme %s"):format(colorscheme))
 
 set.fileencoding = "utf-8" -- File content encoding for the buffer
 set.spelllang = "en" -- Support US english
