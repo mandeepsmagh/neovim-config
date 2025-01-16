@@ -28,12 +28,15 @@ return {
             map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
             -- Enable inlay hints if supported
-            if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                vim.lsp.inlay_hint(bufnr, true)
-                map("<leader>h", function()
-                    vim.lsp.inlay_hint(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
-                end, "[T]oggle Inlay [H]ints")
-            end
+            
+            -- if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            --     vim.lsp.inlay_hint.enable(bufnr, true)  -- Use `enable` instead of directly passing `bufnr`
+            --
+            --     map("<leader>h", function()
+            --         -- Toggle using `enable(bufnr, not is_enabled(bufnr))` instead of non-existent `is_enabled`
+            --         vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
+            --     end, "[T]oggle Inlay [H]ints")
+            -- end
         end
 
         -- Set up conform.nvim
