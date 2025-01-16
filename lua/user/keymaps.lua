@@ -1,4 +1,4 @@
-local utils = require("config.utils")
+local utils = require("user.utils")
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 

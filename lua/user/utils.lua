@@ -9,41 +9,15 @@ function M.CreateNote()
 
     -- Determine the template file path based on the operating system
     local template_path
-    if vim.fn.has('win32') == 1 then
-        template_path = "~/AppData/Local/nvim/lua/templates/notes-template.md"
+    if vim.fn.has("win32") == 1 then
+        template_path = "~/AppData/Local/nvim/lua/user/templates/notes-template.md"
     else
-        template_path = "~/.config/nvim/lua/templates/notes-template.md"
+        template_path = "~/.config/nvim/lua/user/templates/notes-template.md"
     end
 
     vim.cmd("0r " .. template_path)
-    vim.fn.setline(1, {"---", "id: " .. timestamp, "title: " .. title, "keywords: ", "---", "# " .. title})
+    vim.fn.setline(1, { "---", "id: " .. timestamp, "title: " .. title, "keywords: ", "---", "# " .. title })
     vim.cmd("write")
 end
 
 return M
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
