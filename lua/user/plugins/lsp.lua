@@ -29,23 +29,10 @@ return {
             map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
             -- Enable inlay hints if supported
-            
-            -- if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            --     vim.lsp.inlay_hint.enable(bufnr, true)  -- Use `enable` instead of directly passing `bufnr`
-            --
-            --     map("<leader>h", function()
-            --         -- Toggle using `enable(bufnr, not is_enabled(bufnr))` instead of non-existent `is_enabled`
-            --         vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
-            --     end, "[T]oggle Inlay [H]ints")
-            -- end
+            if client.server_capabilities.inlayHintProvider then
+                vim.lsp.inlay_hint.enable(true)
+            end
         end
-
-        -- Set up conform.nvim
-        require("conform").setup({
-            formatters_by_ft = {
-                -- Add any specific formatter settings here
-            }
-        })
 
         -- Set up nvim-cmp
         local cmp = require('cmp')
@@ -70,8 +57,10 @@ return {
                 "omnisharp",
                 "jsonls",
                 "bashls",
+                "html",
+                "cssls"
             },
-            automatic_installation = true;
+            automatic_installation = true,
             handlers = {
                 function(server_name)
                     require("lspconfig")[server_name].setup {
@@ -167,7 +156,7 @@ return {
             mapping = cmp.mapping.preset.insert({
                 ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
                 ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+                ['<CR>'] = cmp.mapping.confirm({ select = true }),
                 ["<C-Space>"] = cmp.mapping.complete(),
             }),
             sources = cmp.config.sources({
