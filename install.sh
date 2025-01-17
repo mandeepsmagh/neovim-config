@@ -1,23 +1,18 @@
+#!/bin/sh
+# not-tested
 # Install rustup
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 
-# Install nix
-curl -L https://nixos.org/nix/install | sh
+# Install Nix using Determinate Systems installer with silent mode
+# will probably still require user to enter password
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm --no-modify-profile
 
-# Source nix
+# Source Nix manually as we disabled profile modification
 . ~/.nix-profile/etc/profile.d/nix.sh
 
-# Set channel to unstable for package install 
-nix-channel --add https://channels.nixos.org/nixos-unstable nixos
-sudo nix-channel --update
-# Update all packages
-# nix-env -u '*'
-# Install packages
-nix-env -iA \
-    nixpkgs.neovim \
-    nixpkgs.tmux \
-    nixpkgs.ripgrep \
-    nixpkgs.gcc \
-    nixpkgs.zig \
-    nixpkgs.fish \
-    nixpkgs.stylua
+# Copy flake.nix to .config/nix
+mkdir -p ~/.config/nix
+cp flake.nix ~/.config/nix/flake.nix
+
+# Install packages from flake
+nix profile install ~/.config/nix#
