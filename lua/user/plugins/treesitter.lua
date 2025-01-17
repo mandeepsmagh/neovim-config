@@ -11,7 +11,7 @@ return {
             configs.setup({
                 ensure_installed = {
                     "lua",
-                    "c_sharp",
+                    --"c_sharp",
                     "html",
                     "typescript",
                     "bash",

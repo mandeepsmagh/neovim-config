@@ -12,7 +12,8 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
-        "b0o/SchemaStore.nvim"
+        "b0o/SchemaStore.nvim",
+        "Hoffs/omnisharp-extended-lsp.nvim"
     },
 
     config = function()
@@ -70,6 +71,7 @@ return {
                 "jsonls",
                 "bashls",
             },
+            automatic_installation = true;
             handlers = {
                 function(server_name)
                     require("lspconfig")[server_name].setup {
@@ -105,10 +107,20 @@ return {
                     }
                 end,
                 ["omnisharp"] = function()
+                    --local pid = vim.fn.getpid()
                     require("lspconfig").omnisharp.setup {
                         capabilities = capabilities,
                         on_attach = on_attach,
-                        cmd = { "OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
+                        handlers = {
+                            ["textDocument/definition"] = require('omnisharp_extended').handler,
+                        },
+                        cmd = { "dotnet", vim.fn.expand("$MASON/packages/omnisharp/libexec/OmniSharp.dll") },
+                        -- Enable roslyn analyzers, code style settings from .editorconfig
+                        enable_roslyn_analyzers = true,
+                        organize_imports_on_format = true,
+                        enable_import_completion = true,
+                        sdk_include_prereleases = true,
+                        enable_editorconfig_support = true,
                         root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git")
                     }
                 end,
