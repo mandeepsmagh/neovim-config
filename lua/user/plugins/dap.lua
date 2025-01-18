@@ -202,7 +202,7 @@ return {
             -- Rust Configuration
             dap.adapters.lldb = {
                 type = 'executable',
-                command = '/usr/bin/lldb-vscode', -- adjust path as needed
+                command = '/usr/bin/lldb', -- adjust path as needed
                 name = "lldb"
             }
 
