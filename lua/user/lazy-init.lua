@@ -14,6 +14,17 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup(
     'user.plugins',
     {
-        --change_detection = { enabled = false }
+        change_detection = { notify = false },
+        performance = {
+            rtp = {
+                disabled_plugins = {
+                    "gzip",
+                    "tarPlugin",
+                    "tohtml",
+                    "tutor",
+                    "zipPlugin"
+                }
+            }
+        }
     }
 )
