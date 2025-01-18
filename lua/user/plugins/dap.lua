@@ -4,6 +4,7 @@ return {
         lazy = true,
         dependencies = {
             "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
             "theHamsta/nvim-dap-virtual-text",
             "nvim-telescope/telescope-dap.nvim",
             -- Add language-specific adapters
@@ -121,30 +122,29 @@ return {
 
             -- Sign configurations
             vim.fn.sign_define('DapBreakpoint', {
-                text = "🔴",
+                text = "⦿",
                 texthl = 'DiagnosticSignError',
                 linehl = '',
                 numhl = ''
             })
             vim.fn.sign_define('DapBreakpointCondition', {
-                text = "●",
+                text = "◉",
                 texthl = 'DiagnosticSignWarn',
                 linehl = '',
                 numhl = ''
             })
             vim.fn.sign_define('DapLogPoint', {
-                text = "◆",
+                text = "⧉",
                 texthl = 'DiagnosticSignInfo',
                 linehl = '',
                 numhl = ''
             })
             vim.fn.sign_define('DapStopped', {
-                text = "→",
+                text = "▶",
                 texthl = 'DiagnosticSignHint',
                 linehl = 'DapStoppedLine',
                 numhl = ''
             })
-
             -- Python Configuration
             require('dap-python').setup('python3')
             dap.configurations.python = {
