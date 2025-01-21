@@ -18,6 +18,7 @@ set.writebackup = false
 set.undofile = true
 
 -- Indentation and formatting
+set.autoindent = true -- indent based on previous lines
 set.expandtab = true
 set.smartindent = true
 set.shiftwidth = 4
