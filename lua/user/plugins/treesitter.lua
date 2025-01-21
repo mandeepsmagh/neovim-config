@@ -38,7 +38,7 @@ return {
                     enable = true,
                 },
                 indent = {
-                    enable = false,
+                    enable = true,
                 },
                 rainbow = {
                     enable = true,
