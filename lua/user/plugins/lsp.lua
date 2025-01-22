@@ -170,7 +170,7 @@ return {
         -- Set up diagnostic config
         vim.diagnostic.config({
             float = {
-                focusable = false,
+                focusable = true,
                 style = "minimal",
                 border = "rounded",
                 source = "always",
