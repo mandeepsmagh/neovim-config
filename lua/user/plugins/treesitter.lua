@@ -11,7 +11,6 @@ return {
             configs.setup({
                 ensure_installed = {
                     "lua",
-                    --"c_sharp",
                     "html",
                     "typescript",
                     "bash",
@@ -26,6 +25,8 @@ return {
                     "markdown_inline",
                 },
                 sync_install = false,
+                auto_install = true,
+                modules = {},
                 ignore_install = {},
                 highlight = {
                     enable = true,
