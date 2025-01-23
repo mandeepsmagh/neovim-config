@@ -20,13 +20,6 @@ return {
         -- Reusable on_attach function
         local on_attach = function(client, bufnr)
             print("LSP attached to buffer for " .. vim.bo[bufnr].filetype)
-            local map = function(keys, func, desc)
-                vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
-            end
-
-            -- Example keybindings
-            map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-            map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
             -- Enable inlay hints if supported
             if client.server_capabilities.inlayHintProvider then
