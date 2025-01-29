@@ -11,7 +11,10 @@ map("n", "<Space>", "")          -- space as leader
 vim.g.mapleader = " "            -- space as leader
 vim.g.maplocalleader = " "       -- space as local leader
 map("n", "zz", ":up<CR>")        -- save file
-map("", "<leader>c", '"+y')      -- Copy to clipboard in normal, visual, select and operator modes
+map("", "<leader>y", '[["+y]]')  -- Copy to clipboard in normal, visual, select and operator modes
+map("", "<leader>Y", '[["+Y]]')  -- Copy line to clipboard in normal, visual, select and operator modes
+map("", "<leader>p", '[["+p]]')  -- paste after cursor from clipboard in normal, visual, select and operator modes
+map("", "<leader>P", '[["+P]]')  -- paste before cursor from clipboard in normal, visual, select and operator modes
 map("n", "<leader>z", ":up<CR>") -- Save file
 map("i", "<C-u>", "<C-g>u<C-u>") -- Make <C-u> undo-friendly
 map("i", "<C-w>", "<C-g>u<C-w>") -- Make <C-w> undo-friendly
@@ -20,6 +23,7 @@ map("n", "QQ", ":qa!<CR>")       -- quit all without saving
 map("i", "jj", "<Esc>")          -- Escape key mapped to jj
 map("n", ";", ":")               -- Command mode
 map("n", "<leader>a", "ggVG")    -- select All
+map("x", "<leader>p", [["_dP]])  -- copied
 
 -- <Tab> to navigate the completion menu
 map("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {
