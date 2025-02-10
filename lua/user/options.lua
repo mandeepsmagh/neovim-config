@@ -4,7 +4,9 @@ local set = vim.opt
 -- Basic editor settings
 set.fileencoding = "utf-8"
 set.spelllang = "en"
-set.clipboard = "unnamedplus"
+-- enable clipboard only if not in ssh mode
+-- required for OSC 52 integration
+set.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 set.mouse = "a"
 set.signcolumn = "yes"
 set.foldmethod = "manual"
