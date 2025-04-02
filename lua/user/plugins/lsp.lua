@@ -46,7 +46,7 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
-                "tsserver",
+                "ts_ls",
                 "omnisharp",
                 "jsonls",
                 "bashls",
@@ -106,8 +106,8 @@ return {
                         root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git")
                     }
                 end,
-                ["tsserver"] = function()
-                    require("lspconfig").tsserver.setup {
+                ["ts_ls"] = function()
+                    require("lspconfig").ts_ls.setup {
                         capabilities = capabilities,
                         on_attach = on_attach,
                         settings = {
