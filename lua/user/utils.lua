@@ -3,6 +3,13 @@ local M = {}
 function M.CreateNote()
     local timestamp = os.date("%Y%m%d%H%M%S")
     local location = vim.fn.input("Enter file location: ")
+
+    -- Check if location is empty or nil
+    if location == nil or location == "" then
+        print("Error: No file location provided. Aborting note creation.")
+        return
+    end
+
     local title = vim.fn.input("Enter note title: ")
     local filename = location .. "/" .. timestamp .. "-" .. title .. ".md"
     vim.cmd("edit " .. filename)
