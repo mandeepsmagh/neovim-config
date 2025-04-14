@@ -1,5 +1,5 @@
 local M = {}
-local set = vim.opt
+local set = vim.o
 
 -- Basic editor settings
 set.fileencoding = "utf-8"
