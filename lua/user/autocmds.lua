@@ -1,38 +1,129 @@
-vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+-- Autocommand groups
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+-- General settings
+local general = augroup("General", { clear = true })
+
+-- Highlight on yank
+autocmd("TextYankPost", {
+    group = general,
     callback = function()
-        vim.highlight.on_yank()
+        vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
     end,
 })
 
---  This function gets run when an LSP attaches to a particular buffer.
---    That is to say, every time a new file is opened that is associated with
---    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
---    function will be executed to configure the current buffer
--- group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(event)
-        -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-        -- to define small helper and utility functions so you don't have to repeat yourself.
-        --
-        -- In this case, we create a function that lets us more easily define mappings specific
-        -- for LSP related items. It sets the mode, buffer and description for us each time.
-        local map = function(keys, func, desc)
-            vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-        end
+-- Remove whitespace on save
+autocmd("BufWritePre", {
+    group = general,
+    pattern = "*",
+    command = ":%s/\\s\\+$//e",
+})
 
+-- Resize splits if window got resized
+autocmd("VimResized", {
+    group = general,
+    callback = function()
+        local current_tab = vim.fn.tabpagenr()
+        vim.cmd("tabdo wincmd =")
+        vim.cmd("tabnext " .. current_tab)
+    end,
+})
+
+-- Close some filetypes with <q>
+autocmd("FileType", {
+    group = general,
+    pattern = {
+        "qf",
+        "help",
+        "man",
+        "notify",
+        "lspinfo",
+        "spectre_panel",
+        "startuptime",
+        "tsplayground",
+        "PlenaryTestPopup",
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+    end,
+})
+
+-- Configure native commenting for specific filetypes
+autocmd("FileType", {
+    group = general,
+    pattern = { "lua", "vim" },
+    callback = function()
+        vim.bo.commentstring = "-- %s"
+    end,
+})
+
+autocmd("FileType", {
+    group = general,
+    pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact", "css", "scss" },
+    callback = function()
+        vim.bo.commentstring = "// %s"
+    end,
+})
+
+-- LSP settings
+local lsp_group = augroup("LspAttach", { clear = true })
+
+-- LSP keymaps when buffer has LSP
+autocmd("LspAttach", {
+    group = lsp_group,
+    callback = function(event)
+        local opts = { buffer = event.buf, silent = true }
+
+        -- LSP keymaps
+        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+        vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+
+        -- Format on save
+        if vim.lsp.get_client_by_id(event.data.client_id).supports_method("textDocument/formatting") then
+            autocmd("BufWritePre", {
+                buffer = event.buf,
+                callback = function()
+                    vim.lsp.buf.format({ bufnr = event.buf })
+                end,
+            })
+        end
+    end,
+})
+
+-- Inlay hints toggle
+autocmd("LspAttach", {
+    group = lsp_group,
+    callback = function(event)
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        local bufnr = vim.api.nvim_get_current_buf()
-        -- The following autocommand is used to enable inlay hints in your
-        -- code, if the language server you are using supports them
-        --
-        -- This may be unwanted, since they displace some of your code
-        if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            map("<leader>h", function()
+        if client and client.supports_method("textDocument/inlayHint") then
+            vim.keymap.set("n", "<leader>th", function()
                 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            end, "[T]oggle Inlay [H]ints")
+            end, { buffer = event.buf, desc = "Toggle inlay hints" })
+        end
+    end,
+})
+
+-- Linting settings
+local lint_group = augroup("Linting", { clear = true })
+
+-- Lint on save
+autocmd("BufWritePost", {
+    group = lint_group,
+    desc = "Run linters after file save",
+    callback = function()
+        local lint_status, lint = pcall(require, "lint")
+        if lint_status then
+            lint.try_lint()
         end
     end,
 })

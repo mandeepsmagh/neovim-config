@@ -2,85 +2,114 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
+        event = { "BufReadPost", "BufNewFile" },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         config = function()
-            local status_ok, configs = pcall(require, "nvim-treesitter.configs")
-            if not status_ok then
-                return
-            end
-
-            configs.setup({
+            require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "lua",
                     "html",
+                    "css",
                     "typescript",
-                    "bash",
-                    "json",
-                    "svelte",
-                    "rust",
                     "javascript",
+                    "tsx",
+                    "json",
+                    "bash",
+                    "rust",
                     "c_sharp",
                     "gitignore",
                     "sql",
                     "markdown",
                     "markdown_inline",
+                    "vim",
+                    "vimdoc",
                 },
+
+                -- Installation settings
                 sync_install = false,
                 auto_install = true,
-                modules = {},
-                ignore_install = {},
+
+                -- Core modules
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,
                 },
-                autopairs = {
-                    enable = true,
-                },
-                incremental_selection = {
-                    enable = true,
-                },
+
                 indent = {
                     enable = true,
                 },
-                rainbow = {
+
+                -- Incremental selection
+                incremental_selection = {
                     enable = true,
-                    disable = { "html" },
-                    extended_mode = false,
-                    max_file_lines = nil,
+                    keymaps = {
+                        init_selection = "<C-space>",
+                        node_incremental = "<C-space>",
+                        scope_incremental = "<C-s>",
+                        node_decremental = "<M-space>",
+                    },
                 },
-                autotag = {
-                    enable = true,
-                },
+
+                -- Text objects (requires nvim-treesitter-textobjects plugin)
                 textobjects = {
                     select = {
                         enable = true,
                         lookahead = true,
                         keymaps = {
-                            ["at"] = "@class.outer",
-                            ["it"] = "@class.inner",
+                            -- Classes
+                            ["ac"] = "@class.outer",
+                            ["ic"] = "@class.inner",
+
+                            -- Functions
                             ["af"] = "@function.outer",
                             ["if"] = "@function.inner",
-                            ["ac"] = "@call.outer",
-                            ["ic"] = "@call.inner",
+
+                            -- Parameters/arguments
                             ["aa"] = "@parameter.outer",
                             ["ia"] = "@parameter.inner",
+
+                            -- Loops
                             ["al"] = "@loop.outer",
                             ["il"] = "@loop.inner",
+
+                            -- Conditionals
                             ["ai"] = "@conditional.outer",
                             ["ii"] = "@conditional.inner",
+
+                            -- Comments
                             ["a/"] = "@comment.outer",
                             ["i/"] = "@comment.inner",
+
+                            -- Blocks
                             ["ab"] = "@block.outer",
                             ["ib"] = "@block.inner",
-                            ["as"] = "@statement.outer",
-                            ["is"] = "@scopename.inner",
-                            ["aA"] = "@attribute.outer",
-                            ["iA"] = "@attribute.inner",
-                            ["aF"] = "@frame.outer",
-                            ["iF"] = "@frame.inner",
+                        },
+                    },
+
+                    move = {
+                        enable = true,
+                        set_jumps = true,
+                        goto_next_start = {
+                            ["]f"] = "@function.outer",
+                            ["]c"] = "@class.outer",
+                        },
+                        goto_next_end = {
+                            ["]F"] = "@function.outer",
+                            ["]C"] = "@class.outer",
+                        },
+                        goto_previous_start = {
+                            ["[f"] = "@function.outer",
+                            ["[c"] = "@class.outer",
+                        },
+                        goto_previous_end = {
+                            ["[F"] = "@function.outer",
+                            ["[C"] = "@class.outer",
                         },
                     },
                 },
             })
         end,
-    }
+    },
 }

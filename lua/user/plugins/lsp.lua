@@ -1,175 +1,244 @@
 return {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-        "stevearc/conform.nvim",
+    {
         "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/nvim-cmp",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-        "j-hui/fidget.nvim",
-        "b0o/SchemaStore.nvim",
-        "Hoffs/omnisharp-extended-lsp.nvim"
+        lazy = false,
+        config = function()
+            require("mason").setup({
+                ui = { border = "rounded" }
+            })
+        end,
     },
 
-    config = function()
-        -- Reusable on_attach function
-        local on_attach = function(client, bufnr)
-            print("LSP attached to buffer for " .. vim.bo[bufnr].filetype)
-
-            -- Enable inlay hints if supported
-            if client.server_capabilities.inlayHintProvider then
-                vim.lsp.inlay_hint.enable(true)
-            end
-        end
-
-        -- Set up nvim-cmp
-        local cmp = require('cmp')
-        local cmp_lsp = require("cmp_nvim_lsp")
-        local capabilities = vim.tbl_deep_extend(
-            "force",
-            {},
-            vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities()
-        )
-
-        -- Set up fidget.nvim
-        require("fidget").setup({})
-
-        -- Set up mason and mason-lspconfig
-        require("mason").setup()
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                "lua_ls",
-                "rust_analyzer",
-                "ts_ls",
-                "omnisharp",
-                "jsonls",
-                "bashls",
-                "html",
-                "cssls"
-            },
-            automatic_installation = true,
-            handlers = {
-                function(server_name)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                    }
-                end,
-                ["lua_ls"] = function()
-                    require("lspconfig").lua_ls.setup {
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                runtime = { version = "LuaJIT" },
-                                diagnostics = {
-                                    globals = { "vim" },
-                                },
-                                workspace = {
-                                    library = vim.api.nvim_get_runtime_file("", true),
-                                    checkThirdParty = false,
-                                },
-                            },
-                        },
-                        on_attach = on_attach,
-                    }
-                end,
-                ["rust_analyzer"] = function()
-                    require("lspconfig").rust_analyzer.setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = {
-                            ["rust-analyzer"] = {}
-                        }
-                    }
-                end,
-                ["omnisharp"] = function()
-                    --local pid = vim.fn.getpid()
-                    require("lspconfig").omnisharp.setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        handlers = {
-                            ["textDocument/definition"] = require('omnisharp_extended').handler,
-                        },
-                        cmd = { "dotnet", vim.fn.expand("$MASON/packages/omnisharp/libexec/OmniSharp.dll") },
-                        -- Enable roslyn analyzers, code style settings from .editorconfig
-                        enable_roslyn_analyzers = true,
-                        organize_imports_on_format = true,
-                        enable_import_completion = true,
-                        sdk_include_prereleases = true,
-                        enable_editorconfig_support = true,
-                        root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git")
-                    }
-                end,
-                ["ts_ls"] = function()
-                    require("lspconfig").ts_ls.setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = {
-                            javascript = { format = { enable = true } },
-                            typescript = { format = { enable = true } },
-                        }
-                    }
-                end,
-                ["bashls"] = function()
-                    require("lspconfig").bashls.setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                    }
-                end,
-                ["jsonls"] = function()
-                    require("lspconfig").jsonls.setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = {
-                            json = {
-                                schemas = require('schemastore').json.schemas(),
-                                validate = { enable = true },
-                            },
-                        },
-                    }
-                end,
-            }
-        })
-
-        -- Set up nvim-cmp with LuaSnip
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-        cmp.setup({
-            snippet = {
-                expand = function(args)
-                    require('luasnip').lsp_expand(args.body)
-                end,
-            },
-            mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
-            }),
-            sources = cmp.config.sources({
-                { name = 'nvim_lsp' },
-                { name = 'luasnip' },
-            }, {
-                { name = 'buffer' },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = { "mason.nvim" },
+        lazy = false,
+        config = function()
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    "lua_ls",
+                    "rust_analyzer",
+                    "ts_ls",
+                    "omnisharp",
+                    "jsonls",
+                    "bashls",
+                    "html",
+                    "cssls",
+                },
+                automatic_installation = true,
             })
-        })
+        end,
+    },
 
-        -- Set up diagnostic config
-        vim.diagnostic.config({
-            float = {
-                focusable = true,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
+    {
+        "saghen/blink.cmp",
+        version = "v0.*",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        event = { "InsertEnter", "CmdlineEnter" },
+        opts = {
+            keymap = { preset = "default" },
+            appearance = {
+                use_nvim_cmp_as_default = true,
+                nerd_font_variant = "mono",
             },
-        })
-    end
+            sources = {
+                default = { "lsp", "path", "snippets", "buffer" },
+            },
+        },
+    },
+
+    {
+        "j-hui/fidget.nvim",
+        event = "LspAttach",
+        opts = {},
+    },
+
+    {
+        "b0o/SchemaStore.nvim",
+        lazy = true,
+    },
+
+    {
+        "Hoffs/omnisharp-extended-lsp.nvim",
+        ft = "cs",
+    },
+
+    -- Native LSP Configuration
+    {
+        name = "native-lsp",
+        dir = vim.fn.stdpath("config"),
+        dependencies = {
+            "mason.nvim",
+            "mason-lspconfig.nvim",
+            "blink.cmp",
+            "SchemaStore.nvim",
+            "omnisharp-extended-lsp.nvim",
+        },
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            -- Wait a bit to ensure Mason binaries are available
+            vim.defer_fn(function()
+                local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+                local on_attach = function(client, bufnr)
+                    print("LSP attached to buffer for " .. vim.bo[bufnr].filetype)
+                    if client.server_capabilities.inlayHintProvider then
+                        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                    end
+                end
+
+                -- Native Neovim LSP setup
+                vim.lsp.config.lua_ls = {
+                    cmd = { "lua-language-server" },
+                    filetypes = { "lua" },
+                    root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
+                    settings = {
+                        Lua = {
+                            runtime = { version = "LuaJIT" },
+                            diagnostics = { globals = { "vim" } },
+                            workspace = {
+                                checkThirdParty = false,
+                                library = vim.api.nvim_get_runtime_file("", true),
+                            },
+                            telemetry = { enable = false },
+                        },
+                    },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.rust_analyzer = {
+                    cmd = { "rust-analyzer" },
+                    filetypes = { "rust" },
+                    root_markers = { "Cargo.toml", "rust-project.json", ".git" },
+                    settings = {
+                        ["rust-analyzer"] = {
+                            cargo = { allFeatures = true },
+                            checkOnSave = { command = "clippy" },
+                        },
+                    },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.ts_ls = { -- Fixed: was tsserver, now ts_ls
+                    cmd = { "typescript-language-server", "--stdio" },
+                    filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+                    root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+                    settings = {
+                        javascript = { format = { enable = true } },
+                        typescript = { format = { enable = true } },
+                    },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.omnisharp = {
+                    cmd = { "omnisharp" },
+                    filetypes = { "cs" },
+                    root_markers = { "*.sln", "*.csproj", ".git" },
+                    settings = {
+                        FormattingOptions = {
+                            EnableEditorConfigSupport = true,
+                            OrganizeImports = true,
+                        },
+                        RoslynExtensionsOptions = {
+                            EnableAnalyzersSupport = true,
+                            EnableImportCompletion = true,
+                        },
+                    },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    handlers = {
+                        ["textDocument/definition"] = function(...)
+                            return require("omnisharp_extended").handler(...)
+                        end,
+                    },
+                }
+
+                vim.lsp.config.jsonls = {
+                    cmd = { "vscode-json-language-server", "--stdio" },
+                    filetypes = { "json", "jsonc" },
+                    root_markers = { "package.json", ".git" },
+                    settings = {
+                        json = {
+                            schemas = require("schemastore").json.schemas(),
+                            validate = { enable = true },
+                        },
+                    },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.bashls = {
+                    cmd = { "bash-language-server", "start" },
+                    filetypes = { "sh", "bash" },
+                    root_markers = { ".git" },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.html = {
+                    cmd = { "vscode-html-language-server", "--stdio" },
+                    filetypes = { "html" },
+                    root_markers = { "package.json", ".git" },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                vim.lsp.config.cssls = {
+                    cmd = { "vscode-css-language-server", "--stdio" },
+                    filetypes = { "css", "scss", "less" },
+                    root_markers = { "package.json", ".git" },
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                }
+
+                -- Enable all servers (fixed server names)
+                vim.lsp.enable({
+                    "lua_ls",
+                    "rust_analyzer",
+                    "ts_ls", -- Fixed: was tsserver
+                    "omnisharp",
+                    "jsonls",
+                    "bashls",
+                    "html",
+                    "cssls",
+                })
+
+                -- Diagnostics configuration
+                vim.diagnostic.config({
+                    virtual_text = true,
+                    signs = true,
+                    underline = true,
+                    update_in_insert = false,
+                    severity_sort = true,
+                    float = {
+                        focusable = true,
+                        style = "minimal",
+                        border = "rounded",
+                        source = "always",
+                    },
+                })
+
+                -- Diagnostic signs
+                local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+                for type, icon in pairs(signs) do
+                    local hl = "DiagnosticSign" .. type
+                    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+                end
+
+                vim.api.nvim_create_user_command("LspInfo", function()
+                    local clients = vim.lsp.get_clients()
+                    if next(clients) == nil then
+                        print("No LSP clients attached")
+                    else
+                        for _, client in pairs(clients) do
+                            print(string.format("Client: %s (id: %d)", client.name, client.id))
+                        end
+                    end
+                end, {})
+            end, 100) -- 100ms delay to ensure Mason is ready
+        end,
+    },
 }

@@ -1,21 +1,28 @@
 return {
     {
         "mfussenegger/nvim-dap",
-        lazy = true,
         dependencies = {
             "rcarriga/nvim-dap-ui",
             "nvim-neotest/nvim-nio",
             "theHamsta/nvim-dap-virtual-text",
             "nvim-telescope/telescope-dap.nvim",
-            -- Add language-specific adapters
-            "microsoft/vscode-node-debug2", -- For TypeScript
-            "mfussenegger/nvim-dap-python", -- For Python
+            "mfussenegger/nvim-dap-python",
+        },
+        keys = {
+            { "<F5>",       function() require("dap").continue() end,                                                    desc = "Debug: Continue" },
+            { "<F10>",      function() require("dap").step_over() end,                                                   desc = "Debug: Step Over" },
+            { "<F11>",      function() require("dap").step_into() end,                                                   desc = "Debug: Step Into" },
+            { "<F9>",       function() require("dap").step_out() end,                                                    desc = "Debug: Step Out" },
+            { "<leader>b",  function() require("dap").toggle_breakpoint() end,                                           desc = "Debug: Toggle Breakpoint" },
+            { "<leader>dr", function() require("dapui").toggle() end,                                                    desc = "Debug: Toggle UI" },
+            { "<leader>B",  function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,        desc = "Debug: Conditional Breakpoint" },
+            { "<leader>lp", function() require("dap").set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, desc = "Debug: Log Point" }
         },
         config = function()
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- Common configurations for dap-ui
+            -- Complete DAP UI setup with all required fields
             dapui.setup({
                 controls = {
                     element = "repl",
@@ -49,36 +56,18 @@ return {
                 layouts = {
                     {
                         elements = {
-                            {
-                                id = "scopes",
-                                size = 0.25
-                            },
-                            {
-                                id = "breakpoints",
-                                size = 0.25
-                            },
-                            {
-                                id = "stacks",
-                                size = 0.25
-                            },
-                            {
-                                id = "watches",
-                                size = 0.25
-                            }
+                            { id = "scopes",      size = 0.25 },
+                            { id = "breakpoints", size = 0.25 },
+                            { id = "stacks",      size = 0.25 },
+                            { id = "watches",     size = 0.25 }
                         },
                         position = "left",
                         size = 40
                     },
                     {
                         elements = {
-                            {
-                                id = "repl",
-                                size = 0.5
-                            },
-                            {
-                                id = "console",
-                                size = 0.5
-                            }
+                            { id = "repl",    size = 0.5 },
+                            { id = "console", size = 0.5 }
                         },
                         position = "bottom",
                         size = 10
@@ -98,7 +87,7 @@ return {
                 }
             })
 
-            -- Automatically open/close dapui
+            -- Auto open/close dapui
             dap.listeners.after.event_initialized["dapui_config"] = function()
                 dapui.open()
             end
@@ -109,18 +98,7 @@ return {
                 dapui.close()
             end
 
-            -- Add common configurations that work across LSPs
-            dap.configurations.common = {
-                {
-                    type = "common",
-                    request = "launch",
-                    name = "Launch Program",
-                    program = "${file}",
-                    cwd = "${workspaceFolder}",
-                }
-            }
-
-            -- Sign configurations
+            -- Enhanced signs
             vim.fn.sign_define('DapBreakpoint', {
                 text = "⦿",
                 texthl = 'DiagnosticSignError',
@@ -145,8 +123,11 @@ return {
                 linehl = 'DapStoppedLine',
                 numhl = ''
             })
-            -- Python Configuration
+
+            -- Python setup
             require('dap-python').setup('python3')
+
+            -- Enhanced Python configurations
             dap.configurations.python = {
                 {
                     type = 'python',
@@ -172,43 +153,50 @@ return {
                 },
             }
 
-            -- TypeScript/JavaScript Configuration
-            dap.adapters.node2 = {
-                type = 'executable',
-                command = 'node',
-                args = { vim.fn.stdpath("data") .. "/mason/packages/node-debug2-adapter/out/src/nodeDebug.js" },
+            -- JavaScript/TypeScript Configuration (requires js-debug-adapter)
+            dap.adapters["pwa-node"] = {
+                type = "server",
+                host = "localhost",
+                port = "${port}",
+                executable = {
+                    command = "node",
+                    args = {
+                        vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+                        "${port}"
+                    },
+                }
             }
 
-            dap.configurations.typescript = {
-                {
-                    type = "node2",
-                    request = "launch",
-                    name = "Launch TypeScript Program",
-                    program = "${file}",
-                    cwd = vim.fn.getcwd(),
-                    sourceMaps = true,
-                    protocol = "inspector",
-                    outFiles = { "${workspaceFolder}/dist/**/*.js" },
-                },
-                {
-                    type = "node2",
-                    request = "attach",
-                    name = "Attach to Process",
-                    processId = require('dap.utils').pick_process,
-                },
-            }
-            dap.configurations.javascript = dap.configurations.typescript
+            for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+                dap.configurations[language] = {
+                    {
+                        type = "pwa-node",
+                        request = "launch",
+                        name = "Launch file",
+                        program = "${file}",
+                        cwd = "${workspaceFolder}",
+                        sourceMaps = true,
+                    },
+                    {
+                        type = "pwa-node",
+                        request = "attach",
+                        name = "Attach",
+                        processId = require 'dap.utils'.pick_process,
+                        cwd = "${workspaceFolder}",
+                    }
+                }
+            end
 
             -- Rust Configuration
             dap.adapters.lldb = {
                 type = 'executable',
-                command = '/usr/bin/lldb', -- adjust path as needed
+                command = vim.fn.exepath('lldb-vscode') or vim.fn.exepath('lldb'),
                 name = "lldb"
             }
 
             dap.configurations.rust = {
                 {
-                    name = "Launch Rust Program",
+                    name = "Launch",
                     type = "lldb",
                     request = "launch",
                     program = function()
@@ -217,13 +205,6 @@ return {
                     cwd = '${workspaceFolder}',
                     stopOnEntry = false,
                     args = {},
-                    runInTerminal = false,
-                },
-                {
-                    name = "Attach to Process",
-                    type = "lldb",
-                    request = "attach",
-                    pid = require('dap.utils').pick_process,
                 },
             }
 
@@ -237,29 +218,31 @@ return {
             dap.configurations.cs = {
                 {
                     type = "coreclr",
-                    name = "Launch .NET Core Program",
+                    name = "Launch",
                     request = "launch",
                     program = function()
                         return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
                     end,
                     cwd = '${workspaceFolder}',
                 },
-                {
-                    type = "coreclr",
-                    name = "Attach to Process",
-                    request = "attach",
-                    processId = require('dap.utils').pick_process,
-                },
             }
         end,
     },
+
     {
         "rcarriga/nvim-dap-ui",
-        lazy = true,
+        dependencies = { "nvim-dap", "nvim-neotest/nvim-nio" },
+        keys = {
+            { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
+            { "<leader>de", function() require("dapui").eval() end,   mode = { "n", "v" },      desc = "Debug: Evaluate" },
+        },
+        config = false, -- Configuration is handled in nvim-dap
     },
+
     {
         "theHamsta/nvim-dap-virtual-text",
-        lazy = true,
+        dependencies = { "nvim-dap" },
+        event = "LspAttach",
         config = function()
             require("nvim-dap-virtual-text").setup({
                 enabled = true,
@@ -275,9 +258,14 @@ return {
             })
         end
     },
+
     {
         "nvim-telescope/telescope-dap.nvim",
-        lazy = true,
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-dap" },
+        keys = {
+            { "<leader>ds", function() require('telescope').extensions.dap.configurations() end,   desc = "Debug: Configurations" },
+            { "<leader>db", function() require('telescope').extensions.dap.list_breakpoints() end, desc = "Debug: Breakpoints" },
+        },
         config = function()
             require('telescope').load_extension('dap')
         end

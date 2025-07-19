@@ -4,13 +4,18 @@ return {
         tag = '0.1.8',
         dependencies = {
             'nvim-lua/plenary.nvim',
+            { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }, -- Optional but recommended
+        },
+        cmd = "Telescope",
+        keys = {
+            { "<C-p>",      "<cmd>Telescope find_files<cr>",  desc = "Find files" },
+            { "<leader>gr", "<cmd>Telescope live_grep<cr>",   desc = "Live grep" },
+            { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git commits" },
+            { "<leader>gs", "<cmd>Telescope git_status<cr>",  desc = "Git status" },
+            { "<leader>dg", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
         },
         config = function()
-            local status_ok, telescope = pcall(require, "telescope")
-            if not status_ok then
-                return
-            end
-
+            local telescope = require("telescope")
             local actions = require("telescope.actions")
 
             telescope.setup({
@@ -33,6 +38,14 @@ return {
                         width = 0.87,
                         height = 0.80,
                         preview_cutoff = 120,
+                    },
+                    file_ignore_patterns = {
+                        "node_modules",
+                        ".git/",
+                        "dist/",
+                        "build/",
+                        "target/",
+                        "%.lock",
                     },
                     mappings = {
                         i = {
@@ -83,9 +96,33 @@ return {
                         },
                     },
                 },
-                pickers = {},
-                extensions = {},
+                pickers = {
+                    find_files = {
+                        hidden = true,
+                        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+                    },
+                    live_grep = {
+                        additional_args = function(opts)
+                            return { "--hidden" }
+                        end,
+                    },
+                    buffers = {
+                        ignore_current_buffer = true,
+                        sort_mru = true,
+                    },
+                },
+                extensions = {
+                    fzf = {
+                        fuzzy = true,
+                        override_generic_sorter = true,
+                        override_file_sorter = true,
+                        case_mode = "smart_case",
+                    },
+                },
             })
+
+            -- Load extensions
+            pcall(telescope.load_extension, "fzf")
         end,
     }
 }
