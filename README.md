@@ -4,13 +4,13 @@ Neovim config with native LSP.
 
 ## Pre-requisites
 
-- [Neovim 0.10.3 install page](https://github.com/neovim/neovim/releases/tag/v0.10.3)
+- [Neovim 0.11+ install page](https://github.com/neovim/neovim/releases/)
 - I recommend using [Nix Package Manager](https://nixos.org/download.html) to install / manage neovim for Linux / MacOS
 - [Use a Nerd Font](https://www.nerdfonts.com/) in your terminal emulator.
 
-`install.sh` script is also available in the directory to automatically install everything. 
+`install.sh` script is also available in the directory to automatically install everything.
 
-### Must-have for fully functional nvim config  
+### Must-have for fully functional nvim config
 
 - [`rust`](https://www.rust-lang.org/tools/install) is required for ripgrep.
 - [`ripgrep`](https://github.com/BurntSushi/ripgrep) is required for grep searching with _Telescope_
@@ -38,7 +38,7 @@ winget install Neovim.Neovim
 winget install -e --id zig.zig
 
 ```
-3. Clone repo 
+3. Clone repo
 
 ```powershell
 git clone git@github.com:mandeepsmagh/neovim-config.git --depth 1 $env:USERPROFILE\AppData\Local\nvim\
