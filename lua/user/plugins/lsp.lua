@@ -95,7 +95,10 @@ return {
                     settings = {
                         Lua = {
                             runtime = { version = "LuaJIT" },
-                            diagnostics = { globals = { "vim" } },
+                            diagnostics = {
+                                disable = { "undefined-field", "missing-fields" },
+                                globals = { "vim" }
+                            },
                             workspace = {
                                 checkThirdParty = false,
                                 library = vim.api.nvim_get_runtime_file("", true),
@@ -221,7 +224,7 @@ return {
                         focusable = true,
                         style = "minimal",
                         border = "rounded",
-                        source = "always",
+                        source = "if_many",
                     },
                 })
 

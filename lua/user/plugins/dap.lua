@@ -8,50 +8,20 @@ return {
             "nvim-telescope/telescope-dap.nvim",
             "mfussenegger/nvim-dap-python",
         },
-        keys = {
-            { "<F5>",       function() require("dap").continue() end,                                                    desc = "Debug: Continue" },
-            { "<F10>",      function() require("dap").step_over() end,                                                   desc = "Debug: Step Over" },
-            { "<F11>",      function() require("dap").step_into() end,                                                   desc = "Debug: Step Into" },
-            { "<F9>",       function() require("dap").step_out() end,                                                    desc = "Debug: Step Out" },
-            { "<leader>b",  function() require("dap").toggle_breakpoint() end,                                           desc = "Debug: Toggle Breakpoint" },
-            { "<leader>dr", function() require("dapui").toggle() end,                                                    desc = "Debug: Toggle UI" },
-            { "<leader>B",  function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,        desc = "Debug: Conditional Breakpoint" },
-            { "<leader>lp", function() require("dap").set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, desc = "Debug: Log Point" }
-        },
+        cmd = { "DapToggleBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapStepOut" },
         config = function()
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- Complete DAP UI setup with all required fields
+            -- Simplified DAPUI setup
             dapui.setup({
                 controls = {
-                    element = "repl",
                     enabled = true,
-                    icons = {
-                        disconnect = "",
-                        pause = "",
-                        play = "",
-                        run_last = "",
-                        step_back = "",
-                        step_into = "",
-                        step_out = "",
-                        step_over = "",
-                        terminate = ""
-                    }
+                    element = "repl",
                 },
-                element_mappings = {},
-                expand_lines = true,
                 floating = {
                     border = "rounded",
-                    mappings = {
-                        close = { "q", "<Esc>" }
-                    }
-                },
-                force_buffers = true,
-                icons = {
-                    collapsed = "",
-                    current_frame = "",
-                    expanded = ""
+                    mappings = { close = { "q", "<Esc>" } }
                 },
                 layouts = {
                     {
@@ -73,61 +43,29 @@ return {
                         size = 10
                     }
                 },
-                mappings = {
-                    edit = "e",
-                    expand = { "<CR>", "<2-LeftMouse>" },
-                    open = "o",
-                    remove = "d",
-                    repl = "r",
-                    toggle = "t"
-                },
-                render = {
-                    indent = 1,
-                    max_value_lines = 100
-                }
             })
 
             -- Auto open/close dapui
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-                dapui.open()
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-                dapui.close()
+            dap.listeners.after.event_initialized["dapui_config"] = dapui.open
+            dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+            dap.listeners.before.event_exited["dapui_config"] = dapui.close
+
+            -- Setup signs
+            local signs = {
+                DapBreakpoint = { text = "⦿", texthl = 'DiagnosticSignError' },
+                DapBreakpointCondition = { text = "◉", texthl = 'DiagnosticSignWarn' },
+                DapLogPoint = { text = "⧉", texthl = 'DiagnosticSignInfo' },
+                DapStopped = { text = "▶", texthl = 'DiagnosticSignHint', linehl = 'DapStoppedLine' },
+            }
+
+            for name, sign in pairs(signs) do
+                vim.fn.sign_define(name, sign)
             end
 
-            -- Enhanced signs
-            vim.fn.sign_define('DapBreakpoint', {
-                text = "⦿",
-                texthl = 'DiagnosticSignError',
-                linehl = '',
-                numhl = ''
-            })
-            vim.fn.sign_define('DapBreakpointCondition', {
-                text = "◉",
-                texthl = 'DiagnosticSignWarn',
-                linehl = '',
-                numhl = ''
-            })
-            vim.fn.sign_define('DapLogPoint', {
-                text = "⧉",
-                texthl = 'DiagnosticSignInfo',
-                linehl = '',
-                numhl = ''
-            })
-            vim.fn.sign_define('DapStopped', {
-                text = "▶",
-                texthl = 'DiagnosticSignHint',
-                linehl = 'DapStoppedLine',
-                numhl = ''
-            })
-
-            -- Python setup
+            -- Language configurations
             require('dap-python').setup('python3')
 
-            -- Enhanced Python configurations
+            -- Python configuration
             dap.configurations.python = {
                 {
                     type = 'python',
@@ -230,16 +168,6 @@ return {
     },
 
     {
-        "rcarriga/nvim-dap-ui",
-        dependencies = { "nvim-dap", "nvim-neotest/nvim-nio" },
-        keys = {
-            { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
-            { "<leader>de", function() require("dapui").eval() end,   mode = { "n", "v" },      desc = "Debug: Evaluate" },
-        },
-        config = false, -- Configuration is handled in nvim-dap
-    },
-
-    {
         "theHamsta/nvim-dap-virtual-text",
         dependencies = { "nvim-dap" },
         event = "LspAttach",
@@ -262,10 +190,6 @@ return {
     {
         "nvim-telescope/telescope-dap.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-dap" },
-        keys = {
-            { "<leader>ds", function() require('telescope').extensions.dap.configurations() end,   desc = "Debug: Configurations" },
-            { "<leader>db", function() require('telescope').extensions.dap.list_breakpoints() end, desc = "Debug: Breakpoints" },
-        },
         config = function()
             require('telescope').load_extension('dap')
         end
