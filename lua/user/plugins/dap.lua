@@ -11,35 +11,56 @@ return {
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- Basic setup with defaults
+            -- DAP UI setup
             dapui.setup()
 
-            -- Auto open/close dapui
             dap.listeners.after.event_initialized["dapui_config"] = dapui.open
             dap.listeners.before.event_terminated["dapui_config"] = dapui.close
             dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-            -- Setup signs
+            -- Signs
             local signs = {
-                DapBreakpoint = { text = "⦿", texthl = 'DiagnosticSignError' },
-                DapBreakpointCondition = { text = "◉", texthl = 'DiagnosticSignWarn' },
-                DapLogPoint = { text = "⧉", texthl = 'DiagnosticSignInfo' },
-                DapStopped = { text = "▶", texthl = 'DiagnosticSignHint', linehl = 'DapStoppedLine' },
+                DapBreakpoint = { text = "⦿", texthl = "DiagnosticSignError" },
+                DapBreakpointCondition = { text = "◉", texthl = "DiagnosticSignWarn" },
+                DapLogPoint = { text = "⧉", texthl = "DiagnosticSignInfo" },
+                DapStopped = {
+                    text = "▶",
+                    texthl = "DiagnosticSignHint",
+                    linehl = "DapStoppedLine"
+                },
             }
-
             for name, sign in pairs(signs) do
                 vim.fn.sign_define(name, sign)
             end
 
-            -- Rust (codelldb via Mason)
-            local codelldb = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
-            if vim.fn.has("win32") == 1 then codelldb = codelldb .. ".exe" end
+            -- 🔧 Fallback logic for global or Mason-installed debugger
+            local function find_debugger(global_cmd, mason_path)
+                if vim.fn.executable(global_cmd) == 1 then
+                    return global_cmd
+                elseif vim.fn.filereadable(mason_path) == 1 then
+                    return mason_path
+                else
+                    return nil
+                end
+            end
 
-            if vim.fn.filereadable(codelldb) == 1 then
+            -- 🦀 Rust Debugging (CodeLLDB)
+            local codelldb = find_debugger(
+                "codelldb",
+                vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
+            )
+            if vim.fn.has("win32") == 1 and codelldb and not codelldb:match("%.exe$") then
+                codelldb = codelldb .. ".exe"
+            end
+
+            if codelldb then
                 dap.adapters.codelldb = {
-                    type = 'server',
+                    type = "server",
                     port = "${port}",
-                    executable = { command = codelldb, args = { "--port", "${port}" } }
+                    executable = {
+                        command = codelldb,
+                        args = { "--port", "${port}" }
+                    },
                 }
 
                 dap.configurations.rust = {
@@ -48,39 +69,42 @@ return {
                         type = "codelldb",
                         request = "launch",
                         program = function()
-                            -- Find any executable in target/debug/ (excluding .d files and directories)
-                            local executables = vim.fn.glob(vim.fn.getcwd() .. '/target/debug/*', false, true)
+                            local executables = vim.fn.glob(vim.fn.getcwd() .. "/target/debug/*", false, true)
                             for _, exe in ipairs(executables) do
-                                -- Skip .d files, directories, and files with extensions
-                                if vim.fn.isdirectory(exe) == 0 and
-                                    not exe:match('%.d$') and
-                                    not exe:match('%.') and
-                                    vim.fn.executable(exe) == 1 then
+                                if vim.fn.isdirectory(exe) == 0
+                                    and not exe:match("%.d$")
+                                    and not exe:match("%.")
+                                    and vim.fn.executable(exe) == 1 then
                                     return exe
                                 end
                             end
-                            return vim.fn.input('Executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+                            return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/target/debug/", "file")
                         end,
-                        cwd = '${workspaceFolder}',
+                        cwd = "${workspaceFolder}",
                     },
                     {
                         name = "Attach",
                         type = "codelldb",
                         request = "attach",
-                        pid = require('dap.utils').pick_process,
+                        pid = require("dap.utils").pick_process,
                     },
                 }
             end
 
-            -- C# (netcoredbg via Mason)
-            local netcoredbg = vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
-            if vim.fn.has("win32") == 1 then netcoredbg = netcoredbg .. ".exe" end
+            -- ⚙️ C# Debugging (Netcoredbg)
+            local netcoredbg = find_debugger(
+                "netcoredbg",
+                vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
+            )
+            if vim.fn.has("win32") == 1 and netcoredbg and not netcoredbg:match("%.exe$") then
+                netcoredbg = netcoredbg .. ".exe"
+            end
 
-            if vim.fn.filereadable(netcoredbg) == 1 then
+            if netcoredbg then
                 dap.adapters.coreclr = {
-                    type = 'executable',
+                    type = "executable",
                     command = netcoredbg,
-                    args = { '--interpreter=vscode' }
+                    args = { "--interpreter=vscode" },
                 }
 
                 dap.configurations.cs = {
@@ -89,24 +113,24 @@ return {
                         type = "coreclr",
                         request = "launch",
                         program = function()
-                            local dlls = vim.fn.glob(vim.fn.getcwd() .. '/bin/Debug/**/*.dll', false, true)
+                            local dlls = vim.fn.glob(vim.fn.getcwd() .. "/bin/Debug/**/*.dll", false, true)
                             return #dlls > 0 and dlls[1]
-                                or vim.fn.input('DLL: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+                                or vim.fn.input("DLL: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
                         end,
-                        cwd = '${workspaceFolder}',
+                        cwd = "${workspaceFolder}",
                     },
                     {
                         name = "Attach",
                         type = "coreclr",
                         request = "attach",
-                        processId = require('dap.utils').pick_process,
+                        processId = require("dap.utils").pick_process,
                     },
                 }
             end
         end,
     },
 
-    -- Virtual text with minimal config
+    -- 🧠 Virtual Text
     {
         "theHamsta/nvim-dap-virtual-text",
         dependencies = { "nvim-dap" },
