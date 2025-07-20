@@ -38,7 +38,7 @@ map("", "P", '"+P')          -- paste before cursor
 map("", "<leader>p", '"_dP') -- delete and paste
 
 -- Move macro recording to <leader>q
-map("n", "q", "<Nop>")                                         -- Disable macro recording on q to avoid accidental macro recording
+map({ "n", "v", "x" }, "q", "<Nop>")                           -- Disable macro recording on q to avoid accidental macro recording
 map("n", "<leader>q", "q", { desc = "Start macro recording" }) -- Move to leader+q
 
 -- Markdown notes
