@@ -125,45 +125,58 @@ return {
                 }
             end
 
-            -- Rust Configuration
-            dap.adapters.lldb = {
-                type = 'executable',
-                command = vim.fn.exepath('lldb-vscode') or vim.fn.exepath('lldb'),
-                name = "lldb"
-            }
+            -- Rust Configuration - Fixed with proper path handling
+            local lldb_cmd = vim.fn.exepath('lldb-vscode')
+            if lldb_cmd == '' then
+                lldb_cmd = vim.fn.exepath('codelldb')
+            end
 
-            dap.configurations.rust = {
-                {
-                    name = "Launch",
-                    type = "lldb",
-                    request = "launch",
-                    program = function()
-                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
-                    end,
-                    cwd = '${workspaceFolder}',
-                    stopOnEntry = false,
-                    args = {},
-                },
-            }
+            -- Only configure lldb adapter if command exists
+            if lldb_cmd ~= '' then
+                dap.adapters.lldb = {
+                    type = 'executable',
+                    command = lldb_cmd,
+                    name = "lldb"
+                }
 
-            -- .NET Configuration
-            dap.adapters.coreclr = {
-                type = 'executable',
-                command = vim.fn.stdpath("data") .. '/mason/packages/netcoredbg/netcoredbg',
-                args = { '--interpreter=vscode' }
-            }
+                dap.configurations.rust = {
+                    {
+                        name = "Launch",
+                        type = "lldb",
+                        request = "launch",
+                        program = function()
+                            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+                        end,
+                        cwd = '${workspaceFolder}',
+                        stopOnEntry = false,
+                        args = {},
+                    },
+                }
+            end
 
-            dap.configurations.cs = {
-                {
-                    type = "coreclr",
-                    name = "Launch",
-                    request = "launch",
-                    program = function()
-                        return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-                    end,
-                    cwd = '${workspaceFolder}',
-                },
-            }
+            -- .NET Configuration - Fixed with proper path handling and vim.fn.expand
+            local netcoredbg_path = vim.fn.expand(vim.fn.stdpath("data") .. '/mason/packages/netcoredbg/netcoredbg')
+
+            -- Only configure coreclr adapter if netcoredbg exists
+            if vim.fn.filereadable(netcoredbg_path) == 1 then
+                dap.adapters.coreclr = {
+                    type = 'executable',
+                    command = netcoredbg_path,
+                    args = { '--interpreter=vscode' }
+                }
+
+                dap.configurations.cs = {
+                    {
+                        type = "coreclr",
+                        name = "Launch",
+                        request = "launch",
+                        program = function()
+                            return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+                        end,
+                        cwd = '${workspaceFolder}',
+                    },
+                }
+            end
         end,
     },
 
