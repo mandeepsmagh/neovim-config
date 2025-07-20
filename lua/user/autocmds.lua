@@ -74,22 +74,9 @@ local lsp_group = augroup("LspAttach", { clear = true })
 autocmd("LspAttach", {
     group = lsp_group,
     callback = function(event)
-        local opts = { buffer = event.buf, silent = true }
-
-        -- LSP keymaps
-        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-        vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-        vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
-
         -- Format on save
-        if vim.lsp.get_client_by_id(event.data.client_id).supports_method("textDocument/formatting") then
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if client and client.server_capabilities.documentFormattingProvider then
             autocmd("BufWritePre", {
                 buffer = event.buf,
                 callback = function()
@@ -105,9 +92,10 @@ autocmd("LspAttach", {
     group = lsp_group,
     callback = function(event)
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.supports_method("textDocument/inlayHint") then
+        if client and client.server_capabilities.inlayHintProvider then
             vim.keymap.set("n", "<leader>th", function()
-                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+                local bufnr = event.buf
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
             end, { buffer = event.buf, desc = "Toggle inlay hints" })
         end
     end,

@@ -91,9 +91,21 @@ map("n", "<C-j>", "<C-w>j")              -- move to below
 map("n", "<C-k>", "<C-w>k")              -- move to above
 map("n", "<C-l>", "<C-w>l")              -- move to right
 
--- LSP (minimal set - most handled by autocmds)
-map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
-map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-map("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Rename current symbol" })
-map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
-map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>")
+-- LSP keymaps
+map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
+map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
+map("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "Go to type definition" })
+map("i", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Signature help" })
+
+-- Diagnostics
+map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show diagnostic" })
+map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "Diagnostics to loclist" })
+
+-- Neovim 0.11+ Built-in LSP keymaps
+-- K        -> vim.lsp.buf.hover()
+-- grr      -> vim.lsp.buf.references()
+-- gri      -> vim.lsp.buf.implementation()
+-- grn      -> vim.lsp.buf.rename()
+-- gra      -> vim.lsp.buf.code_action()
+-- [d, ]d   -> diagnostic navigation
+-- <C-s>    -> vim.lsp.buf.signature_help() (insert mode) - conflicts with save
