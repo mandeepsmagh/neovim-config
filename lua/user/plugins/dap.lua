@@ -5,45 +5,14 @@ return {
             "rcarriga/nvim-dap-ui",
             "nvim-neotest/nvim-nio",
             "theHamsta/nvim-dap-virtual-text",
-            "nvim-telescope/telescope-dap.nvim",
-            "mfussenegger/nvim-dap-python",
         },
         cmd = { "DapToggleBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapStepOut" },
         config = function()
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- Simplified DAPUI setup
-            dapui.setup({
-                controls = {
-                    enabled = true,
-                    element = "repl",
-                },
-                floating = {
-                    border = "rounded",
-                    mappings = { close = { "q", "<Esc>" } }
-                },
-                layouts = {
-                    {
-                        elements = {
-                            { id = "scopes",      size = 0.25 },
-                            { id = "breakpoints", size = 0.25 },
-                            { id = "stacks",      size = 0.25 },
-                            { id = "watches",     size = 0.25 }
-                        },
-                        position = "left",
-                        size = 40
-                    },
-                    {
-                        elements = {
-                            { id = "repl",    size = 0.5 },
-                            { id = "console", size = 0.5 }
-                        },
-                        position = "bottom",
-                        size = 10
-                    }
-                },
-            })
+            -- Basic setup with defaults
+            dapui.setup()
 
             -- Auto open/close dapui
             dap.listeners.after.event_initialized["dapui_config"] = dapui.open
@@ -62,149 +31,86 @@ return {
                 vim.fn.sign_define(name, sign)
             end
 
-            -- Language configurations
-            require('dap-python').setup('python3')
+            -- Rust (codelldb via Mason)
+            local codelldb = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
+            if vim.fn.has("win32") == 1 then codelldb = codelldb .. ".exe" end
 
-            -- Python configuration
-            dap.configurations.python = {
-                {
-                    type = 'python',
-                    request = 'launch',
-                    name = 'Launch Python Program',
-                    program = "${file}",
-                    pythonPath = function()
-                        return vim.fn.exepath('python3')
-                    end,
-                },
-                {
-                    type = 'python',
-                    request = 'launch',
-                    name = 'Launch Python with Arguments',
-                    program = "${file}",
-                    args = function()
-                        local args_string = vim.fn.input('Arguments: ')
-                        return vim.split(args_string, " +")
-                    end,
-                    pythonPath = function()
-                        return vim.fn.exepath('python3')
-                    end,
-                },
-            }
-
-            -- JavaScript/TypeScript Configuration (requires js-debug-adapter)
-            dap.adapters["pwa-node"] = {
-                type = "server",
-                host = "localhost",
-                port = "${port}",
-                executable = {
-                    command = "node",
-                    args = {
-                        vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
-                        "${port}"
-                    },
-                }
-            }
-
-            for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
-                dap.configurations[language] = {
-                    {
-                        type = "pwa-node",
-                        request = "launch",
-                        name = "Launch file",
-                        program = "${file}",
-                        cwd = "${workspaceFolder}",
-                        sourceMaps = true,
-                    },
-                    {
-                        type = "pwa-node",
-                        request = "attach",
-                        name = "Attach",
-                        processId = require 'dap.utils'.pick_process,
-                        cwd = "${workspaceFolder}",
-                    }
-                }
-            end
-
-            -- Rust Configuration - Fixed with proper path handling
-            local lldb_cmd = vim.fn.exepath('lldb-vscode')
-            if lldb_cmd == '' then
-                lldb_cmd = vim.fn.exepath('codelldb')
-            end
-
-            -- Only configure lldb adapter if command exists
-            if lldb_cmd ~= '' then
-                dap.adapters.lldb = {
-                    type = 'executable',
-                    command = lldb_cmd,
-                    name = "lldb"
+            if vim.fn.filereadable(codelldb) == 1 then
+                dap.adapters.codelldb = {
+                    type = 'server',
+                    port = "${port}",
+                    executable = { command = codelldb, args = { "--port", "${port}" } }
                 }
 
                 dap.configurations.rust = {
                     {
                         name = "Launch",
-                        type = "lldb",
+                        type = "codelldb",
                         request = "launch",
                         program = function()
-                            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+                            -- Find any executable in target/debug/ (excluding .d files and directories)
+                            local executables = vim.fn.glob(vim.fn.getcwd() .. '/target/debug/*', false, true)
+                            for _, exe in ipairs(executables) do
+                                -- Skip .d files, directories, and files with extensions
+                                if vim.fn.isdirectory(exe) == 0 and
+                                    not exe:match('%.d$') and
+                                    not exe:match('%.') and
+                                    vim.fn.executable(exe) == 1 then
+                                    return exe
+                                end
+                            end
+                            return vim.fn.input('Executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
                         end,
                         cwd = '${workspaceFolder}',
-                        stopOnEntry = false,
-                        args = {},
+                    },
+                    {
+                        name = "Attach",
+                        type = "codelldb",
+                        request = "attach",
+                        pid = require('dap.utils').pick_process,
                     },
                 }
             end
 
-            -- .NET Configuration - Fixed with proper path handling and vim.fn.expand
-            local netcoredbg_path = vim.fn.expand(vim.fn.stdpath("data") .. '/mason/packages/netcoredbg/netcoredbg')
+            -- C# (netcoredbg via Mason)
+            local netcoredbg = vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
+            if vim.fn.has("win32") == 1 then netcoredbg = netcoredbg .. ".exe" end
 
-            -- Only configure coreclr adapter if netcoredbg exists
-            if vim.fn.filereadable(netcoredbg_path) == 1 then
+            if vim.fn.filereadable(netcoredbg) == 1 then
                 dap.adapters.coreclr = {
                     type = 'executable',
-                    command = netcoredbg_path,
+                    command = netcoredbg,
                     args = { '--interpreter=vscode' }
                 }
 
                 dap.configurations.cs = {
                     {
-                        type = "coreclr",
                         name = "Launch",
+                        type = "coreclr",
                         request = "launch",
                         program = function()
-                            return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+                            local dlls = vim.fn.glob(vim.fn.getcwd() .. '/bin/Debug/**/*.dll', false, true)
+                            return #dlls > 0 and dlls[1]
+                                or vim.fn.input('DLL: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
                         end,
                         cwd = '${workspaceFolder}',
+                    },
+                    {
+                        name = "Attach",
+                        type = "coreclr",
+                        request = "attach",
+                        processId = require('dap.utils').pick_process,
                     },
                 }
             end
         end,
     },
 
+    -- Virtual text with minimal config
     {
         "theHamsta/nvim-dap-virtual-text",
         dependencies = { "nvim-dap" },
-        event = "LspAttach",
-        config = function()
-            require("nvim-dap-virtual-text").setup({
-                enabled = true,
-                enabled_commands = true,
-                highlight_changed_variables = true,
-                highlight_new_as_changed = true,
-                show_stop_reason = true,
-                commented = false,
-                virt_text_pos = 'eol',
-                all_frames = false,
-                virt_lines = false,
-                virt_text_win_col = nil
-            })
-        end
-    },
-
-    {
-        "nvim-telescope/telescope-dap.nvim",
-        dependencies = { "nvim-telescope/telescope.nvim", "nvim-dap" },
-        config = function()
-            require('telescope').load_extension('dap')
-        end
+        event = "VeryLazy",
+        opts = {}
     },
 }
