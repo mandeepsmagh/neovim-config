@@ -11,9 +11,8 @@ return {
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- DAP UI setup
+            -- UI Setup
             dapui.setup()
-
             dap.listeners.after.event_initialized["dapui_config"] = dapui.open
             dap.listeners.before.event_terminated["dapui_config"] = dapui.close
             dap.listeners.before.event_exited["dapui_config"] = dapui.close
@@ -33,10 +32,10 @@ return {
                 vim.fn.sign_define(name, sign)
             end
 
-            -- 🔧 Fallback logic for global or Mason-installed debugger
+            -- Debugger resolver
             local function find_debugger(global_cmd, mason_path)
                 if vim.fn.executable(global_cmd) == 1 then
-                    return global_cmd
+                    return vim.fn.exepath(global_cmd)
                 elseif vim.fn.filereadable(mason_path) == 1 then
                     return mason_path
                 else
@@ -44,14 +43,11 @@ return {
                 end
             end
 
-            -- 🦀 Rust Debugging (CodeLLDB)
+            -- Rust (CodeLLDB)
             local codelldb = find_debugger(
                 "codelldb",
-                vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
+                vim.fn.stdpath("data") .. "/mason/bin/codelldb"
             )
-            if vim.fn.has("win32") == 1 and codelldb and not codelldb:match("%.exe$") then
-                codelldb = codelldb .. ".exe"
-            end
 
             if codelldb then
                 dap.adapters.codelldb = {
@@ -69,16 +65,16 @@ return {
                         type = "codelldb",
                         request = "launch",
                         program = function()
-                            local executables = vim.fn.glob(vim.fn.getcwd() .. "/target/debug/*", false, true)
-                            for _, exe in ipairs(executables) do
-                                if vim.fn.isdirectory(exe) == 0
-                                    and not exe:match("%.d$")
-                                    and not exe:match("%.")
-                                    and vim.fn.executable(exe) == 1 then
-                                    return exe
+                            local cwd = vim.fn.getcwd()
+                            local debug_path = cwd .. "/target/debug"
+                            local files = vim.fn.glob(debug_path .. "/*", false, true)
+                            for _, file in ipairs(files) do
+                                local name = vim.fn.fnamemodify(file, ":t")
+                                if vim.fn.isdirectory(file) == 0 and not name:match("%.d$") and vim.fn.executable(file) == 1 then
+                                    return file
                                 end
                             end
-                            return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/target/debug/", "file")
+                            return vim.fn.input("Executable: ", debug_path .. "/", "file")
                         end,
                         cwd = "${workspaceFolder}",
                     },
@@ -91,14 +87,11 @@ return {
                 }
             end
 
-            -- ⚙️ C# Debugging (Netcoredbg)
+            -- C# (.NET Core)
             local netcoredbg = find_debugger(
                 "netcoredbg",
-                vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
+                vim.fn.stdpath("data") .. "/mason/bin/netcoredbg"
             )
-            if vim.fn.has("win32") == 1 and netcoredbg and not netcoredbg:match("%.exe$") then
-                netcoredbg = netcoredbg .. ".exe"
-            end
 
             if netcoredbg then
                 dap.adapters.coreclr = {
@@ -113,9 +106,24 @@ return {
                         type = "coreclr",
                         request = "launch",
                         program = function()
-                            local dlls = vim.fn.glob(vim.fn.getcwd() .. "/bin/Debug/**/*.dll", false, true)
-                            return #dlls > 0 and dlls[1]
-                                or vim.fn.input("DLL: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
+                            local patterns = {
+                                "/bin/Debug/**/*.dll",
+                                "/bin/debug/**/*.dll",
+                                "/bin/Release/**/*.dll",
+                                "/bin/release/**/*.dll",
+                            }
+                            local found = {}
+                            for _, pat in ipairs(patterns) do
+                                local matches = vim.fn.glob(vim.fn.getcwd() .. pat, false, true)
+                                for _, dll in ipairs(matches) do
+                                    table.insert(found, dll)
+                                end
+                            end
+                            table.sort(found, function(a, b)
+                                return vim.fn.getftime(a) > vim.fn.getftime(b)
+                            end)
+                            return #found > 0 and found[1]
+                                or vim.fn.input("DLL: ", vim.fn.getcwd() .. "/bin/", "file")
                         end,
                         cwd = "${workspaceFolder}",
                     },
@@ -130,11 +138,10 @@ return {
         end,
     },
 
-    -- 🧠 Virtual Text
     {
         "theHamsta/nvim-dap-virtual-text",
         dependencies = { "nvim-dap" },
         event = "VeryLazy",
-        opts = {}
+        opts = {},
     },
 }
