@@ -115,3 +115,11 @@ autocmd("BufWritePost", {
         end
     end,
 })
+
+vim.api.nvim_create_user_command("LspDebug", function()
+    local ft = vim.bo.filetype
+    local root = vim.fs.find({ "*.sln", "*.csproj", ".git" }, { upward = true })[1]
+    print("Filetype:", ft)
+    print("Project root:", root or "No root found")
+    print("Clients:", vim.inspect(vim.lsp.get_clients()))
+end, {})
