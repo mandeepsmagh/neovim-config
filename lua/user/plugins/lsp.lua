@@ -19,7 +19,6 @@ return {
                     "lua_ls",
                     "rust_analyzer",
                     "ts_ls",
-                    "omnisharp",
                     "jsonls",
                     "bashls",
                     "html",
@@ -57,9 +56,4 @@ return {
         "b0o/SchemaStore.nvim",
         lazy = true,
     },
-
-    {
-        "Hoffs/omnisharp-extended-lsp.nvim",
-        ft = "cs",
-    }
 }

@@ -1,13 +1,19 @@
 return {
     {
-        "rose-pine/neovim",
-        name = "rose-pine",
+        "rebelot/kanagawa.nvim",
+        name = "kanagawa",
         config = function()
-            vim.cmd.colorscheme("rose-pine-moon")
+            vim.cmd.colorscheme("kanagawa-wave")
         end,
     },
     {
-        "rebelot/kanagawa.nvim",
-        name = "kanagawa",
+        "folke/tokyonight.nvim",
+        name = "tokyonight",
+        lazy = true,
+    },
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        lazy = true,
     },
 }

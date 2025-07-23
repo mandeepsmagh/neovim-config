@@ -26,6 +26,12 @@ map("i", "jj", "<Esc>")          -- Escape key mapped to jj
 map("n", ";", ":")               -- Command mode
 map("n", "<leader>a", "ggVG")    -- select All
 
+-- Markdown editing
+map("n", "<leader>cb", function()
+    vim.api.nvim_put({ "```", "", "```" }, "l", true, true)
+    vim.cmd("normal! k")
+end, { desc = "Insert empty fenced code block" })
+
 -- Smart paste and delete
 map("v", "p", '"_dP') -- Better paste in visual mode
 map("", "dd", '"_dd') -- don't save deleted content
