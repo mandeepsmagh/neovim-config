@@ -4,7 +4,11 @@ return {
         lazy = false,
         config = function()
             require("mason").setup({
-                ui = { border = "rounded" }
+                ui = { border = "rounded" },
+                registries = {
+                    "github:mason-org/mason-registry",
+                    "github:Crashdummyy/mason-registry", -- Custom registry for Roslyn
+                },
             })
         end,
     },
@@ -56,4 +60,11 @@ return {
         "b0o/SchemaStore.nvim",
         lazy = true,
     },
+    {
+        "seblyng/roslyn.nvim",
+        ft = "cs",
+        opts = {
+            -- your configuration comes here; leave empty for default settings
+        },
+    }
 }
