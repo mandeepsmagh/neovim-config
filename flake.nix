@@ -26,7 +26,7 @@
             neovim
             bun
             nodejs
-            pm2
+            netcoredbg
           ];
         in {
           default = pkgs.buildEnv {
