@@ -85,6 +85,8 @@ return {
                             -- Blocks
                             ["ab"] = "@block.outer",
                             ["ib"] = "@block.inner",
+                            ["aM"] = "@codeblock.outer", -- Markdown block (all fences + content)
+                            ["iM"] = "@codeblock.inner", -- Markdown block content only
                         },
                     },
 
@@ -94,18 +96,22 @@ return {
                         goto_next_start = {
                             ["]f"] = "@function.outer",
                             ["]c"] = "@class.outer",
+                            ["]m"] = "@codeblock.outer", -- jump to next Markdown block start
                         },
                         goto_next_end = {
                             ["]F"] = "@function.outer",
                             ["]C"] = "@class.outer",
+                            ["]M"] = "@codeblock.outer", -- jump to next Markdown block end
                         },
                         goto_previous_start = {
                             ["[f"] = "@function.outer",
                             ["[c"] = "@class.outer",
+                            ["[m"] = "@codeblock.outer", -- jump to previous Markdown block start
                         },
                         goto_previous_end = {
                             ["[F"] = "@function.outer",
                             ["[C"] = "@class.outer",
+                            ["[M"] = "@codeblock.outer", -- jump to previous Markdown block end
                         },
                     },
                 },
