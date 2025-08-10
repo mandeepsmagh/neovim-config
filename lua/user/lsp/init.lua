@@ -5,7 +5,8 @@ local servers = {
     "jsonls",
     "bashls",
     "html",
-    "cssls"
+    "cssls",
+    "tinymist"
 }
 
 for _, server in ipairs(servers) do

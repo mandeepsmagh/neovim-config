@@ -27,6 +27,7 @@ return {
                     "bashls",
                     "html",
                     "cssls",
+                    "tinymist"
                 },
                 automatic_installation = true,
             })
