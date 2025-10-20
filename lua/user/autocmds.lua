@@ -69,6 +69,7 @@ autocmd("FileType", {
 
 -- LSP settings
 local lsp_group = augroup("LspAttach", { clear = true })
+local no_format = { sql = true }
 
 -- LSP keymaps when buffer has LSP
 autocmd("LspAttach", {
@@ -76,8 +77,18 @@ autocmd("LspAttach", {
     callback = function(event)
         -- Format on save
         local client = vim.lsp.get_client_by_id(event.data.client_id)
+        local ft = vim.bo[event.buf].filetype
+
+        if no_format[ft] then
+            if client then
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
+            end
+            return
+        end
         if client and client.server_capabilities.documentFormattingProvider then
             autocmd("BufWritePre", {
+                group = lsp_group,
                 buffer = event.buf,
                 callback = function()
                     vim.lsp.buf.format({ bufnr = event.buf })
