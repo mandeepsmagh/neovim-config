@@ -1,8 +1,30 @@
-
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
+        -- define sections first
+        local sections = {
+            lualine_a = { 'mode' },
+            lualine_b = { 'branch', 'diff', 'diagnostics' },
+            lualine_c = { 'filename' },
+            -- Uncomment the next line if you want to use 'lsp_progress'
+            -- lualine_c = { 'lsp_progress' },
+            lualine_d = {
+                function()
+                    return require('nvim-treesitter').statusline(40)
+                end,
+            },
+            lualine_x = { 'encoding', 'fileformat', 'filetype' },
+            lualine_y = { 'progress' },
+            lualine_z = { 'location' },
+        }
+
+        -- Conditionally add MSSQL component if available
+        local ok, mssql = pcall(require, "mssql")
+        if ok and mssql.lualine_component then
+            table.insert(sections.lualine_c, mssql.lualine_component)
+        end
+
         require('lualine').setup {
             options = {
                 icons_enabled = true,
@@ -10,29 +32,17 @@ return {
                 component_separators = '|',
                 section_separators = '',
             },
-            sections = {
-                lualine_a = { 'mode' },
-                lualine_b = { 'branch', 'diff', 'diagnostics' },
-                lualine_c = { 'filename' },
-                -- Uncomment the next line if you want to use 'lsp_progress'
-                -- lualine_c = { 'lsp_progress' },
-                lualine_d = {function()
-                    return require'nvim-treesitter'.statusline(40)
-                end},
-                lualine_x = { 'encoding', 'fileformat', 'filetype' },
-                lualine_y = { 'progress' },
-                lualine_z = { 'location' },
-            },
+            sections = sections,
             inactive_sections = {
                 lualine_a = {},
                 lualine_b = {},
                 lualine_c = { 'filename' },
                 lualine_x = { 'location' },
                 lualine_y = {},
-                lualine_z = {}
+                lualine_z = {},
             },
             tabline = {},
-            extensions = {}
+            extensions = {},
         }
-    end
+    end,
 }
