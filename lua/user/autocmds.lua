@@ -67,6 +67,14 @@ autocmd("FileType", {
     end,
 })
 
+-- Auto-reload buffers when files change on disk
+autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    group = general,
+    desc = "Check if files changed on disk",
+    pattern = "*",
+    command = "checktime",
+})
+
 -- LSP settings
 local lsp_group = augroup("LspAttach", { clear = true })
 local no_format = { sql = true }
