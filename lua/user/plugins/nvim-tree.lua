@@ -5,7 +5,11 @@ return {
             filters = {
                 dotfiles = false,
             },
-            --lazy = false
+            git = {
+                enable = true,
+                ignore = false,
+                timeout = 500,
+            }, --lazy = false
         })
     end,
 }
