@@ -4,7 +4,7 @@ local set = vim.opt
 -- Basic editor settings
 set.fileencoding = "utf-8"
 set.spelllang = "en"
-set.clipboard = "unnamedplus"
+set.clipboard = { "unnamedplus" }
 -- enable OSC 52 integration for ssh only
 -- this is to allow paste to work in terminals that don't support osc52 for paste
 if vim.env.SSH_TTY then
