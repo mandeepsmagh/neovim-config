@@ -123,13 +123,9 @@ map("n", "<F9>", function() require("dap").step_out() end, { desc = "Debug: Step
 map("n", "<leader>b", function() require("dap").toggle_breakpoint() end, { desc = "Debug: Toggle Breakpoint" })
 map("n", "<leader>B", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
     { desc = "Debug: Conditional Breakpoint" })
+map("n", "<leader>dB", function() require("dap").clear_breakpoints() end, { desc = "Debug: Clear All Breakpoints" })
 map("n", "<leader>lp", function() require("dap").set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
     { desc = "Debug: Log Point" })
-map("n", "<leader>ds", function() require('telescope').extensions.dap.configurations() end,
-    { desc = "Debug: Configurations" })
-map("n", "<leader>db", function() require('telescope').extensions.dap.list_breakpoints() end,
-    { desc = "Debug: Breakpoints" })
-map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Debug: Toggle UI" })
 map({ "n", "v" }, "<leader>de", function() require("dapui").eval() end, { desc = "Debug: Evaluate" })
-map("n", "<leader>dr", function() require("dapui").toggle() end, { desc = "Debug: Toggle UI" })
+map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Debug: Toggle UI" })
 map("n", "<leader>dc", function() require("dapui").toggle({ layout = 2 }) end, { desc = "DAP Output (toggle bottom)" })
