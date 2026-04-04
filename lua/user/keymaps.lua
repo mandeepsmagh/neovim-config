@@ -116,16 +116,46 @@ map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "Diag
 -- <C-s>    -> vim.lsp.buf.signature_help() (insert mode) - conflicts with save
 
 -- DAP (Debug Adapter Protocol) keymaps
-map("n", "<F5>", function() require("dap").continue() end, { desc = "Debug: Continue" })
-map("n", "<F10>", function() require("dap").step_over() end, { desc = "Debug: Step Over" })
-map("n", "<F11>", function() require("dap").step_into() end, { desc = "Debug: Step Into" })
-map("n", "<F9>", function() require("dap").step_out() end, { desc = "Debug: Step Out" })
-map("n", "<leader>b", function() require("dap").toggle_breakpoint() end, { desc = "Debug: Toggle Breakpoint" })
-map("n", "<leader>B", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
-    { desc = "Debug: Conditional Breakpoint" })
-map("n", "<leader>dB", function() require("dap").clear_breakpoints() end, { desc = "Debug: Clear All Breakpoints" })
-map("n", "<leader>lp", function() require("dap").set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
-    { desc = "Debug: Log Point" })
-map({ "n", "v" }, "<leader>de", function() require("dapui").eval() end, { desc = "Debug: Evaluate" })
-map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Debug: Toggle UI" })
-map("n", "<leader>dc", function() require("dapui").toggle({ layout = 2 }) end, { desc = "DAP Output (toggle bottom)" })
+map("n", "<F5>", function()
+  require("dap").continue()
+end, { desc = "Debug: Continue" })
+
+map("n", "<F10>", function()
+  require("dap").step_over()
+end, { desc = "Debug: Step Over" })
+
+map("n", "<F11>", function()
+  require("dap").step_into()
+end, { desc = "Debug: Step Into" })
+
+map("n", "<F9>", function()
+  require("dap").step_out()
+end, { desc = "Debug: Step Out" })
+
+map("n", "<leader>b", function()
+  require("dap").toggle_breakpoint()
+end, { desc = "Debug: Toggle Breakpoint" })
+
+map("n", "<leader>dB", function()
+  require("dap").clear_breakpoints()
+end, { desc = "Debug: Clear All Breakpoints" })
+
+map("n", "<leader>B", function()
+  require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { desc = "Debug: Conditional Breakpoint" })
+
+map("n", "<leader>lp", function()
+  require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
+end, { desc = "Debug: Log Point" })
+
+map({ "n", "v" }, "<leader>de", function()
+  require("dapui").eval()
+end, { desc = "Debug: Evaluate" })
+
+map("n", "<leader>du", function()
+  require("dapui").toggle()
+end, { desc = "Debug: Toggle UI" })
+
+map("n", "<leader>dc", function()
+  require("dapui").toggle({ layout = 2 })
+end, { desc = "DAP Output (toggle bottom)" })

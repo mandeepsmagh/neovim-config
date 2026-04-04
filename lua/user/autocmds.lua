@@ -9,7 +9,7 @@ local general = augroup("General", { clear = true })
 autocmd("TextYankPost", {
     group = general,
     callback = function()
-        vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
+        vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
     end,
 })
 
@@ -76,25 +76,35 @@ autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
 })
 
 -- LSP settings
-local lsp_group = augroup("LspAttach", { clear = true })
+local lsp_group = augroup("LspGroup", { clear = true })
 local no_format = { sql = true }
 
--- LSP keymaps when buffer has LSP
 autocmd("LspAttach", {
     group = lsp_group,
     callback = function(event)
-        -- Format on save
         local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if not client then return end
         local ft = vim.bo[event.buf].filetype
 
+        -- Inlay hints: enable by default + toggle keymap
+        if client:supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+            vim.keymap.set("n", "<leader>th", function()
+                vim.lsp.inlay_hint.enable(
+                    not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }),
+                    { bufnr = event.buf }
+                )
+            end, { buffer = event.buf, desc = "Toggle inlay hints" })
+        end
+
+        -- Format on save (skip filetypes in no_format)
         if no_format[ft] then
-            if client then
-                client.server_capabilities.documentFormattingProvider = false
-                client.server_capabilities.documentRangeFormattingProvider = false
-            end
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
             return
         end
-        if client and client.server_capabilities.documentFormattingProvider then
+
+        if client:supports_method("textDocument/formatting") then
             autocmd("BufWritePre", {
                 group = lsp_group,
                 buffer = event.buf,
@@ -102,20 +112,6 @@ autocmd("LspAttach", {
                     vim.lsp.buf.format({ bufnr = event.buf })
                 end,
             })
-        end
-    end,
-})
-
--- Inlay hints toggle
-autocmd("LspAttach", {
-    group = lsp_group,
-    callback = function(event)
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.server_capabilities.inlayHintProvider then
-            vim.keymap.set("n", "<leader>th", function()
-                local bufnr = event.buf
-                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-            end, { buffer = event.buf, desc = "Toggle inlay hints" })
         end
     end,
 })
@@ -137,8 +133,22 @@ autocmd("BufWritePost", {
 
 vim.api.nvim_create_user_command("LspDebug", function()
     local ft = vim.bo.filetype
-    local root = vim.fs.find({ "*.sln", "*.csproj", ".git" }, { upward = true })[1]
+    local bufpath = vim.api.nvim_buf_get_name(0)
+    local bufdir = vim.fn.fnamemodify(bufpath, ":h")
+
+    -- Search upward from the actual buffer directory, not cwd
+    local sln = vim.fs.find(function(name)
+        return name:match("%.sln$") or name:match("%.csproj$")
+    end, { upward = true, path = bufdir, type = "file" })
+
     print("Filetype:", ft)
-    print("Project root:", root or "No root found")
-    print("Clients:", vim.inspect(vim.lsp.get_clients()))
+    print("Buffer path:", bufpath)
+    print("Buffer dir:", bufdir)
+    print("CWD:", vim.fn.getcwd())
+    print("Solution/project found:", vim.inspect(sln))
+    print("Roslyn selected solution:", vim.inspect(vim.g.roslyn_nvim_selected_solution))
+    print("Active clients:")
+    for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+        print("  -", client.name, "| root:", client.root_dir)
+    end
 end, {})
