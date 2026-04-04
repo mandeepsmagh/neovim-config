@@ -12,8 +12,7 @@ Neovim config with native LSP.
 
 ### Must-have for fully functional nvim config
 
-- [`rust`](https://www.rust-lang.org/tools/install) is required for ripgrep.
-- [`ripgrep`](https://github.com/BurntSushi/ripgrep) is required for grep searching with _Telescope_
+- [`rust`](https://www.rust-lang.org/tools/install) is required for blink.
 
 ## Install
 
