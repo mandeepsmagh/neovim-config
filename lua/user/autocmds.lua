@@ -116,6 +116,20 @@ autocmd("LspAttach", {
     end,
 })
 
+vim.api.nvim_create_user_command("LspInfo", function()
+    local buf = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_clients({ bufnr = buf })
+    if #clients == 0 then
+        vim.notify("No LSP attached", vim.log.levels.WARN)
+        return
+    end
+    local lines = { "ft=" .. vim.bo[buf].filetype }
+    for _, client in ipairs(clients) do
+        table.insert(lines, string.format("• %s (id=%d)  root=%s", client.name, client.id, client.root_dir or "nil"))
+    end
+    vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, { title = "LSP" })
+end, { desc = "Show LSP clients attached to current buffer" })
+
 -- Linting settings
 local lint_group = augroup("Linting", { clear = true })
 
@@ -130,25 +144,3 @@ autocmd("BufWritePost", {
         end
     end,
 })
-
-vim.api.nvim_create_user_command("LspDebug", function()
-    local ft = vim.bo.filetype
-    local bufpath = vim.api.nvim_buf_get_name(0)
-    local bufdir = vim.fn.fnamemodify(bufpath, ":h")
-
-    -- Search upward from the actual buffer directory, not cwd
-    local sln = vim.fs.find(function(name)
-        return name:match("%.sln$") or name:match("%.csproj$")
-    end, { upward = true, path = bufdir, type = "file" })
-
-    print("Filetype:", ft)
-    print("Buffer path:", bufpath)
-    print("Buffer dir:", bufdir)
-    print("CWD:", vim.fn.getcwd())
-    print("Solution/project found:", vim.inspect(sln))
-    print("Roslyn selected solution:", vim.inspect(vim.g.roslyn_nvim_selected_solution))
-    print("Active clients:")
-    for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-        print("  -", client.name, "| root:", client.root_dir)
-    end
-end, {})
