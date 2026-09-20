@@ -42,9 +42,6 @@ map("", "p", '"+p')          -- paste after cursor from clipboard in normal, vis
 map("", "P", '"+P')          -- paste before cursor
 map("", "<leader>p", '"_dP') -- delete and paste
 
--- Move macro recording to <leader>q
-map({ "n", "v", "x" }, "q", "<Nop>")                           -- Disable macro recording on q to avoid accidental macro recording
-map("n", "<leader>q", "q", { desc = "Start macro recording" }) -- Move to leader+q
 
 -- Markdown notes
 map("n", "<leader>nm", utils.CreateNote)
@@ -81,13 +78,6 @@ map("n", "<leader>o", "m`o<Esc>``")    -- Insert a newline in normal mode
 map("n", "<leader>n", ":NvimTreeToggle<CR>")  -- open/close
 map("n", "<leader>r", ":NvimTreeRefresh<CR>") -- refresh
 
--- Telescope
-map("n", "<C-p>", "<cmd>Telescope find_files<CR>")
-map("n", "<leader>gr", "<cmd>Telescope live_grep<CR>")
-map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>")
-map("n", "<leader>gs", "<cmd>Telescope git_status<CR>")
-map("n", "<leader>dg", "<cmd>Telescope diagnostics<CR>")
-
 -- Split screen
 map("n", "<leader>s", "<cmd>split<CR>")  -- horizontal split
 map("n", "<leader>v", "<cmd>vsplit<CR>") -- vertical split
@@ -104,7 +94,7 @@ map("i", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Signatu
 
 -- Diagnostics
 map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show diagnostic" })
-map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "Diagnostics to loclist" })
+map("n", "<leader>dq", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "Diagnostics to loclist" })
 
 -- Neovim 0.11+ Built-in LSP keymaps
 -- K        -> vim.lsp.buf.hover()
