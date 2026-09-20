@@ -136,17 +136,3 @@ vim.api.nvim_create_user_command("LspInfo", function()
     vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, { title = "LSP" })
 end, { desc = "Show LSP clients attached to current buffer" })
 
--- Linting settings
-local lint_group = augroup("Linting", { clear = true })
-
--- Lint on save
-autocmd("BufWritePost", {
-    group = lint_group,
-    desc = "Run linters after file save",
-    callback = function()
-        local lint_status, lint = pcall(require, "lint")
-        if lint_status then
-            lint.try_lint()
-        end
-    end,
-})
