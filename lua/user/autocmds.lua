@@ -13,11 +13,17 @@ autocmd("TextYankPost", {
     end,
 })
 
--- Remove whitespace on save
+-- Remove trailing whitespace on save. Filetypes that need it (Markdown
+-- hard breaks) opt out by setting b:trim_trailing_whitespace = false in
+-- their ftplugin.
 autocmd("BufWritePre", {
     group = general,
-    pattern = "*",
-    command = ":%s/\\s\\+$//e",
+    callback = function()
+        if vim.b.trim_trailing_whitespace == false then return end
+        local view = vim.fn.winsaveview()
+        vim.cmd([[silent! keeppatterns %s/\s\+$//e]])
+        vim.fn.winrestview(view)
+    end,
 })
 
 -- Resize splits if window got resized
