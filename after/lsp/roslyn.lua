@@ -19,13 +19,20 @@ return {
         "--autoLoadProjects",
         "--stdio",
     },
-    filetypes = { "cs" },
+    filetypes = { "razor", "cs" },
     root_dir = function(bufnr, cb)
         local root = vim.fs.root(bufnr, function(name)
             return name:match("%.sln$") or name:match("%.csproj$")
         end)
         if root then cb(root) end
     end,
+    settings = {
+        -- better performance
+        ["csharp|background_analysis"] = {
+            dotnet_analyzer_diagnostics_scope = "openFiles",
+            dotnet_compiler_diagnostics_scope = "openFiles",
+        },
+    },
     handlers = {
         ["workspace/projectInitializationComplete"] = function()
             vim.notify("Roslyn project initialization complete", vim.log.levels.INFO)
