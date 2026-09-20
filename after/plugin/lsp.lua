@@ -28,7 +28,6 @@ require("fidget").setup({})
 require("blink.cmp").setup({
     keymap = { preset = "default" },
     appearance = {
-        use_nvim_cmp_as_default = true,
         nerd_font_variant = "mono",
     },
     completion = {
@@ -40,4 +39,5 @@ require("blink.cmp").setup({
     fuzzy = { implementation = "prefer_rust_with_warning" },
 })
 
-vim.lsp.enable('roslyn')
+-- Enable the roslyn LSP (config lives in after/lsp/roslyn.lua)
+vim.lsp.enable("roslyn")
