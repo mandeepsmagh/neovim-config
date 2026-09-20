@@ -91,6 +91,9 @@ map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declara
 map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
 map("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "Go to type definition" })
 map("i", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Signature help" })
+map({ "n", "v" }, "<leader>f", function()
+    vim.lsp.buf.format({ async = false })
+end, { desc = "Format buffer or range" })
 
 -- Diagnostics
 map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show diagnostic" })
