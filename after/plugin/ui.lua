@@ -1,7 +1,12 @@
+-- Global UI overrides. dressing sets vim.ui.input/select, then mini.pick
+-- takes over vim.ui.select. Keeping both here makes that order explicit.
 vim.pack.add({
+    { src = "https://github.com/stevearc/dressing.nvim" },
     { src = "https://github.com/echasnovski/mini.pick" },
     { src = "https://github.com/echasnovski/mini.extra" },
 })
+
+require("dressing").setup()
 
 local pick = require("mini.pick")
 local extra = require("mini.extra")
