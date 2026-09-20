@@ -59,8 +59,15 @@ vim.keymap.set({ "x", "o" }, "iM", sel("@codeblock.inner"))
 
 -- Move keymaps
 local move = require("nvim-treesitter-textobjects.move")
-local function mv(query, dir, start)
-    return function() move.goto_adjacent(query, "textobjects", dir, start) end
+
+local function mv(query, forward, start)
+    local fn
+    if forward then
+        fn = start and move.goto_next_start or move.goto_next_end
+    else
+        fn = start and move.goto_previous_start or move.goto_previous_end
+    end
+    return function() fn(query, "textobjects") end
 end
 
 vim.keymap.set({ "n", "x", "o" }, "]f", mv("@function.outer", true, true))
