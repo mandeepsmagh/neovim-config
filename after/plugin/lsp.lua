@@ -2,7 +2,6 @@ vim.pack.add({
     { src = "https://github.com/williamboman/mason.nvim" },
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/j-hui/fidget.nvim" },
-    { src = "https://github.com/b0o/SchemaStore.nvim" },
     { src = "https://github.com/rafamadriz/friendly-snippets" },
     { src = "https://github.com/saghen/blink.cmp",            version = vim.version.range("^1") },
 })

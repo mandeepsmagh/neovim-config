@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "SchemaStore.nvim": {
-      "rev": "5f3dda4ddc40df27be848beb4cbada90e4de18da",
-      "src": "https://github.com/b0o/SchemaStore.nvim"
-    },
     "blink.cmp": {
       "rev": "bcdb83937de8b487b3f5cde7b7c060610c86d4ee",
       "src": "https://github.com/saghen/blink.cmp",
@@ -92,10 +88,6 @@
     "nvim-treesitter-textobjects": {
       "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
-    },
-    "roslyn.nvim": {
-      "rev": "ff43201090361b8936e008a006473b59ef2c0ca6",
-      "src": "https://github.com/seblyng/roslyn.nvim"
     },
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
