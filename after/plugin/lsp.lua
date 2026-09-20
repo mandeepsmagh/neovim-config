@@ -3,7 +3,7 @@ vim.pack.add({
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/j-hui/fidget.nvim" },
     { src = "https://github.com/rafamadriz/friendly-snippets" },
-    { src = "https://github.com/saghen/blink.cmp",            version = vim.version.range("^1") },
+    { src = "https://github.com/saghen/blink.cmp",                 version = vim.version.range("^1") },
 })
 
 -- ── Mason ─────────────────────────────────────────────────────────────
@@ -16,8 +16,7 @@ require("mason").setup({
 
 require("mason-lspconfig").setup({
     ensure_installed = {
-        "lua_ls", "rust_analyzer", "ts_ls", "jsonls",
-        "bashls", "html", "cssls", "tinymist",
+        "lua_ls", "rust_analyzer", "ts_ls", "tinymist",
     },
     automatic_enable = true,
 })
@@ -35,7 +34,10 @@ require("blink.cmp").setup({
     sources = {
         default = { "lsp", "path", "snippets", "buffer" },
     },
-    fuzzy = { implementation = "prefer_rust_with_warning" },
+    fuzzy = {
+        implementation = "prefer_rust_with_warning",
+        prebuilt_binaries = { force_version = "v*" },
+    },
 })
 
 -- Enable the roslyn LSP (config lives in after/lsp/roslyn.lua)
