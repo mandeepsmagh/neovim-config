@@ -66,12 +66,3 @@ end, { desc = "Diagnostics" })
 map("n", "<leader><leader>", function()
     builtin.resume()
 end, { desc = "Resume picker" })
-
--- Optional handy extras
-map("n", "<leader>fb", function()
-    builtin.buffers()
-end, { desc = "Buffers" })
-
-map("n", "<leader>fh", function()
-    builtin.help()
-end, { desc = "Help tags" })
