@@ -5,9 +5,9 @@ local set = vim.opt
 set.fileencoding = "utf-8"
 set.spelllang = "en"
 set.clipboard = { "unnamedplus" }
--- enable OSC 52 integration for ssh only
+-- enable OSC 52 integration for ssh and wsl2 only
 -- this is to allow paste to work in terminals that don't support osc52 for paste
-if vim.env.SSH_TTY then
+if vim.env.SSH_TTY or vim.env.WSL_DISTRO_NAME then
     vim.g.clipboard = "osc52"
 end
 set.mouse = "a"
