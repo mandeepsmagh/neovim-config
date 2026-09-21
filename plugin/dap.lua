@@ -160,10 +160,7 @@ local setup_dap = once(function()
     return dap
 end)
 
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "rust", "cs" },
-    callback = setup_dap,
-})
+once.filetype({ "rust", "cs" }, setup_dap)
 
 vim.keymap.set("n", "<F5>", function() setup_dap().continue() end, { desc = "DAP Continue" })
 vim.keymap.set("n", "<leader>db", function() setup_dap().toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
