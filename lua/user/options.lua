@@ -33,6 +33,7 @@ set.softtabstop = 4
 
 -- Search settings
 set.hlsearch = true
+set.incsearch = true
 set.ignorecase = true
 set.smartcase = true
 set.inccommand = "split" -- show live substitution preview
