@@ -1,7 +1,5 @@
 local once = require("once")
 
--- DAP is only needed while debugging, so defer the install and setup until the
--- first trigger: opening a debug-capable file, or pressing a DAP keymap.
 local setup = once(function()
     vim.pack.add({
         { src = "https://github.com/mfussenegger/nvim-dap" },
@@ -36,11 +34,20 @@ local setup = once(function()
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
     local signs = {
-        DapBreakpoint = { text = "⦿", texthl = "DiagnosticSignError" },
-        DapBreakpointCondition = { text = "◉", texthl = "DiagnosticSignWarn" },
-        DapLogPoint = { text = "⧉", texthl = "DiagnosticSignInfo" },
+        DapBreakpoint = {
+            text = "?",
+            texthl = "DiagnosticSignError",
+        },
+        DapBreakpointCondition = {
+            text = "?",
+            texthl = "DiagnosticSignWarn",
+        },
+        DapLogPoint = {
+            text = "?",
+            texthl = "DiagnosticSignInfo",
+        },
         DapStopped = {
-            text = "▶",
+            text = "",
             texthl = "DiagnosticSignHint",
             linehl = "DapStoppedLine",
         },
@@ -55,9 +62,9 @@ local setup = once(function()
             return vim.fn.exepath(global_cmd)
         elseif vim.fn.filereadable(mason_path) == 1 then
             return mason_path
-        else
-            return nil
         end
+
+        return nil
     end
 
     local codelldb = find_debugger(
@@ -87,6 +94,7 @@ local setup = once(function()
 
                     for _, file in ipairs(files) do
                         local name = vim.fn.fnamemodify(file, ":t")
+
                         if vim.fn.isdirectory(file) == 0
                             and not name:match("%.d$")
                             and vim.fn.executable(file) == 1
@@ -95,7 +103,11 @@ local setup = once(function()
                         end
                     end
 
-                    return vim.fn.input("Executable: ", debug_path .. "/", "file")
+                    return vim.fn.input(
+                        "Executable: ",
+                        debug_path .. "/",
+                        "file"
+                    )
                 end,
                 cwd = "${workspaceFolder}",
             },
@@ -135,8 +147,13 @@ local setup = once(function()
 
                     local found = {}
 
-                    for _, pat in ipairs(patterns) do
-                        local matches = vim.fn.glob(vim.fn.getcwd() .. pat, false, true)
+                    for _, pattern in ipairs(patterns) do
+                        local matches = vim.fn.glob(
+                            vim.fn.getcwd() .. pattern,
+                            false,
+                            true
+                        )
+
                         vim.list_extend(found, matches)
                     end
 
@@ -146,7 +163,11 @@ local setup = once(function()
 
                     return #found > 0
                         and found[1]
-                        or vim.fn.input("DLL: ", vim.fn.getcwd() .. "/bin/", "file")
+                        or vim.fn.input(
+                            "DLL: ",
+                            vim.fn.getcwd() .. "/bin/",
+                            "file"
+                        )
                 end,
                 cwd = "${workspaceFolder}",
             },
@@ -162,30 +183,49 @@ local setup = once(function()
     return dap
 end)
 
--- Load when a debug-capable file is opened.
-once.filetype({ "rust", "cs" }, setup)
-
--- Every keymap goes through the loader, so pressing one loads DAP first.
 local map = vim.keymap.set
 
 map("n", "<F5>", function() setup().continue() end, { desc = "Debug: Continue" })
+
 map("n", "<F10>", function() setup().step_over() end, { desc = "Debug: Step Over" })
+
 map("n", "<F11>", function() setup().step_into() end, { desc = "Debug: Step Into" })
+
 map("n", "<F9>", function() setup().step_out() end, { desc = "Debug: Step Out" })
+
 map("n", "<leader>b", function() setup().toggle_breakpoint() end, { desc = "Debug: Toggle Breakpoint" })
+
 map("n", "<leader>dB", function() setup().clear_breakpoints() end, { desc = "Debug: Clear All Breakpoints" })
-map("n", "<leader>B", function() setup().set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Debug: Conditional Breakpoint" })
-map("n", "<leader>lp", function() setup().set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Debug: Log Point" })
+
+map("n", "<leader>B", function()
+    setup().set_breakpoint(
+        nil,
+        nil,
+        vim.fn.input("Breakpoint condition: ")
+    )
+end, { desc = "Debug: Conditional Breakpoint" })
+
+map("n", "<leader>lp", function()
+    setup().set_breakpoint(
+        nil,
+        nil,
+        vim.fn.input("Log point message: ")
+    )
+end, { desc = "Debug: Log Point" })
+
 map({ "n", "v" }, "<leader>de", function()
     setup()
     require("dapui").eval()
 end, { desc = "Debug: Evaluate" })
+
 map("n", "<leader>du", function()
     setup()
     require("dapui").toggle()
 end, { desc = "Debug: Toggle UI" })
+
 map("n", "<leader>dc", function()
     setup()
     require("dapui").toggle({ layout = 2 })
 end, { desc = "DAP Output (toggle bottom)" })
+
 map("n", "<leader>dr", function() setup().repl.open() end, { desc = "Debug: REPL" })
