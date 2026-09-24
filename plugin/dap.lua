@@ -21,7 +21,7 @@ local setup = once(function()
         only_first_definition = true,
         all_references = false,
         clear_on_continue = false,
-        virt_text_pos = vim.fn.has("nvim-0.10") == 1 and "inline" or "eol",
+        virt_text_pos = "inline",
         all_frames = false,
         virt_lines = false,
         virt_text_win_col = nil,
