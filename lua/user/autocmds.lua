@@ -19,6 +19,7 @@ autocmd("TextYankPost", {
 autocmd("BufWritePre", {
     group = general,
     callback = function()
+        if vim.bo.buftype ~= "" then return end
         if vim.b.trim_trailing_whitespace == false then return end
         local view = vim.fn.winsaveview()
         vim.cmd([[silent! keeppatterns %s/\s\+$//e]])
@@ -73,8 +74,10 @@ autocmd("FileType", {
     end,
 })
 
--- Auto-reload buffers when files change on disk
-autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+-- Auto-reload buffers when files change on disk.
+-- CursorHoldI is intentionally excluded: checktime can pop a blocking
+-- W12 warning, and triggering that mid-insert is jarring.
+autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     group = general,
     desc = "Check if files changed on disk",
     pattern = "*",
@@ -111,8 +114,13 @@ autocmd("LspAttach", {
         end
 
         if client:supports_method("textDocument/formatting") then
+            -- Buffer-scoped group with clear = true: if multiple clients
+            -- attach to the same buffer, each LspAttach replaces this
+            -- buffer's format autocmd instead of stacking another one,
+            -- so BufWritePre only formats once per save.
+            local fmt_group = augroup("LspFormat_" .. event.buf, { clear = true })
             autocmd("BufWritePre", {
-                group = lsp_group,
+                group = fmt_group,
                 buffer = event.buf,
                 callback = function()
                     vim.lsp.buf.format({ bufnr = event.buf })
@@ -131,8 +139,7 @@ vim.api.nvim_create_user_command("LspInfo", function()
     end
     local lines = { "ft=" .. vim.bo[buf].filetype }
     for _, client in ipairs(clients) do
-        table.insert(lines, string.format("• %s (id=%d)  root=%s", client.name, client.id, client.root_dir or "nil"))
+        table.insert(lines, string.format("- %s (id=%d)  root=%s", client.name, client.id, client.root_dir or "nil"))
     end
     vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, { title = "LSP" })
 end, { desc = "Show LSP clients attached to current buffer" })
-
