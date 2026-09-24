@@ -35,19 +35,19 @@ local setup = once(function()
 
     local signs = {
         DapBreakpoint = {
-            text = "?",
+            text = "⦿",
             texthl = "DiagnosticSignError",
         },
         DapBreakpointCondition = {
-            text = "?",
+            text = "◉",
             texthl = "DiagnosticSignWarn",
         },
         DapLogPoint = {
-            text = "?",
+            text = "⧉",
             texthl = "DiagnosticSignInfo",
         },
         DapStopped = {
-            text = "",
+            text = "▶",
             texthl = "DiagnosticSignHint",
             linehl = "DapStoppedLine",
         },
