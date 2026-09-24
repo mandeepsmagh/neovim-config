@@ -12,9 +12,10 @@ map("n", "<Space>", "<Nop>", { desc = "Disable Space motion" })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--------------------- SAVE ------------------------------
+-------------------- File operations ------------------------------
 map({ "n", "i" }, "<C-s>", "<Esc><cmd>up<cr>", { desc = "Save file" })
 map("n", "<leader>z", "<cmd>up<cr>", { desc = "Save file" })
+map("n", "QQ", ":qa!<CR>", { desc = "quit all without saving" })
 
 -------------------- EDITING ------------------------------
 map("i", "<C-u>", "<C-g>u<C-u>", { desc = "Undo-friendly clear-to-start" })
