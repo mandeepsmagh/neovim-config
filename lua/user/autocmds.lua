@@ -21,8 +21,9 @@ autocmd("BufWritePre", {
     callback = function()
         if vim.bo.buftype ~= "" then return end
         if vim.b.trim_trailing_whitespace == false then return end
+        if vim.bo.binary then return end
         local view = vim.fn.winsaveview()
-        vim.cmd([[silent! keeppatterns %s/\s\+$//e]])
+        vim.cmd([[silent! keepjumps keeppatterns %s/\s\+$//e]])
         vim.fn.winrestview(view)
     end,
 })
@@ -57,23 +58,6 @@ autocmd("FileType", {
     end,
 })
 
--- Configure native commenting for specific filetypes
-autocmd("FileType", {
-    group = general,
-    pattern = { "lua", "vim" },
-    callback = function()
-        vim.bo.commentstring = "-- %s"
-    end,
-})
-
-autocmd("FileType", {
-    group = general,
-    pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact", "css", "scss" },
-    callback = function()
-        vim.bo.commentstring = "// %s"
-    end,
-})
-
 -- Auto-reload buffers when files change on disk.
 -- CursorHoldI is intentionally excluded: checktime can pop a blocking
 -- W12 warning, and triggering that mid-insert is jarring.
@@ -81,7 +65,17 @@ autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     group = general,
     desc = "Check if files changed on disk",
     pattern = "*",
-    command = "checktime",
+    callback = function()
+        if vim.fn.mode() ~= "c" then vim.cmd("checktime") end
+    end,
+})
+
+-- Diagnostics
+vim.diagnostic.config({
+    severity_sort = true,
+    virtual_text = { spacing = 2, prefix = "●" },
+    float = { source = "if_many" },
+    jump = { float = true },
 })
 
 -- LSP settings

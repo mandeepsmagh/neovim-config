@@ -1,6 +1,9 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 local utils = require("user.utils")
 local keymap = vim.keymap.set
-local opts = { noremap = true, silent = true }
+local opts = { silent = true }
 
 local function map(mode, lhs, rhs, extra_opts)
     local options = vim.tbl_extend("force", opts, extra_opts or {})
@@ -9,12 +12,9 @@ end
 
 -------------------- LEADER ------------------------------
 map("n", "<Space>", "<Nop>", { desc = "Disable Space motion" })
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
 
 -------------------- File operations ------------------------------
 map({ "n", "i" }, "<C-s>", "<Esc><cmd>up<cr>", { desc = "Save file" })
-map("n", "<leader>z", "<cmd>up<cr>", { desc = "Save file" })
 map("n", "QQ", ":qa!<CR>", { desc = "quit all without saving" })
 
 -------------------- EDITING ------------------------------
@@ -28,12 +28,12 @@ map("n", "<leader>cb", function()
     vim.cmd("normal! k")
 end, { desc = "Insert fenced code block" })
 
--------------------- REGISTERS ------------------------------
-
-map("x", "<leader>p", '"_dP', { desc = "Paste over selection (no yank)" })
-map("x", "<leader>P", '"_dP', { desc = "Paste over selection (no yank)" })
+-- Visual P pastes over the selection without overwriting the register (:h v_P)
 
 -------------------- MOVEMENT ------------------------------
+-- wrap is on: move by screen line unless a count is given
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = "Down (screen line)" })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = "Up (screen line)" })
 map("n", "<A-Down>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
 map("n", "<A-Up>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
 map("i", "<A-Down>", "<Esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
@@ -43,8 +43,8 @@ map("x", "<A-Up>", ":move '<-2<CR>gv-gv", { desc = "Move selection up" })
 map("x", "J", ":move '>+1<CR>gv-gv", { desc = "Move selection down" })
 map("x", "K", ":move '<-2<CR>gv-gv", { desc = "Move selection up" })
 
-map("v", "<", "<gv", { desc = "Indent left, keep selection" })
-map("v", ">", ">gv", { desc = "Indent right, keep selection" })
+map("x", "<", "<gv", { desc = "Indent left, keep selection" })
+map("x", ">", ">gv", { desc = "Indent right, keep selection" })
 
 -------------------- WINDOWS ------------------------------
 map("n", "<C-h>", "<C-w>h", { desc = "Window left" })
@@ -65,7 +65,7 @@ map("n", "<leader>nm", utils.CreateNote, { desc = "Create note" })
 
 -- nvim-tree -------------------------------------------------
 map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file tree" })
-map("n", "<leader>r", "<cmd>NvimTreeRefresh<cr>", { desc = "Refresh file tree" })
+map("n", "<leader>r", "<cmd>NvimTreeFindFile<cr>", { desc = "Reveal file in tree" })
 
 -------------------- LSP ------------------------------
 map("n", "gD", function() vim.lsp.buf.declaration() end, { desc = "Go to declaration" })

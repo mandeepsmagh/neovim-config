@@ -198,11 +198,7 @@ map("n", "<leader>b", function() setup().toggle_breakpoint() end, { desc = "Debu
 map("n", "<leader>dB", function() setup().clear_breakpoints() end, { desc = "Debug: Clear All Breakpoints" })
 
 map("n", "<leader>B", function()
-    setup().set_breakpoint(
-        nil,
-        nil,
-        vim.fn.input("Breakpoint condition: ")
-    )
+    setup().set_breakpoint(vim.fn.input("Breakpoint condition: "))
 end, { desc = "Debug: Conditional Breakpoint" })
 
 map("n", "<leader>lp", function()

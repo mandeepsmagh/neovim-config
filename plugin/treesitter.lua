@@ -3,12 +3,24 @@ vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
 })
 
+-- Keep parsers in sync with their queries when the plugin is updated
+vim.api.nvim_create_autocmd("PackChanged", {
+    callback = function(ev)
+        local d = ev.data
+        if d.spec.name == "nvim-treesitter" and d.kind ~= "delete" then
+            if not d.active then vim.cmd.packadd("nvim-treesitter") end
+            vim.cmd("TSUpdate")
+        end
+    end,
+})
+
 -- Install parsers
 require("nvim-treesitter").install({
     "lua", "html", "css", "typescript", "javascript",
     "tsx", "json", "bash", "rust", "c_sharp",
     "gitignore", "sql", "markdown", "markdown_inline",
-    "vim", "vimdoc", "svelte"
+    "vim", "vimdoc", "svelte", "typst", "luadoc",
+    "yaml", "toml", "diff", "regex", "query",
 })
 
 -- Enable highlight + indent per buffer
@@ -34,7 +46,6 @@ require("nvim-treesitter-textobjects").setup({
         },
     },
     move = {
-        enable = true,
         set_jumps = true,
     },
 })
