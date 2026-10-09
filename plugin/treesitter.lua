@@ -19,8 +19,7 @@ require("nvim-treesitter").install({
     "lua", "html", "css", "typescript", "javascript",
     "tsx", "json", "bash", "rust", "c_sharp",
     "gitignore", "sql", "markdown", "markdown_inline",
-    "vim", "vimdoc", "svelte", "typst", "luadoc",
-    "yaml", "toml", "diff", "regex", "query",
+    "svelte", "typst", "yaml", "toml", "diff", "query",
 })
 
 -- Enable highlight + indent per buffer
